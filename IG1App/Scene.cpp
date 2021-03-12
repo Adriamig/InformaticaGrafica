@@ -15,12 +15,33 @@ void Scene::init()
 	// Textures
 
 	// Graphics objects (entities) of the scene
-	gObjects.push_back(new Poligono(200, 45, { 1.0, 0, 1.0, 1.0 }));
-	gObjects.push_back(new Poligono(200, 3, { 1.0, 1.0, 0, 1.0 }));
-	gObjects.push_back(new Sierpinski(200, 2000, { 1.0, 1.0, 0, 1.0 }));
-	gObjects.push_back(new TrianguloRGB(50));
-	gObjects.push_back(new RectanguloRGB(700, 400));
+	gObjects.push_back(new EjesRGB(400.0));
+	if (mId == 0) {
+		gObjects.push_back(new Poligono(200, 45, { 1.0, 0, 1.0, 1.0 }));
+		gObjects.push_back(new Poligono(200, 3, { 1.0, 1.0, 0, 1.0 }));
+		gObjects.push_back(new Sierpinski(200, 2000, { 1.0, 1.0, 0, 1.0 }));
+		auto tri = new TrianguloRGB(25);
+		// tri->setModelMat(translate(tri->modelMat(), dvec3(100, 100, 0))); 
+		// tri->setModelMat(rotate(tri->modelMat(), radians(25.0), dvec3(0, 0, 1)));
+		// tri->setModelMat(rotate(tri->modelMat(), radians(-25.0), dvec3(0, 0, 1))); // Prueba de cambio
+		// tri->setModelMat(translate(tri->modelMat(), dvec3(200, 0, 0))); // Prueba de cambio
+		gObjects.push_back(tri);
+		auto rect = new RectanguloRGB(700, 400);
+		rect->setModelMat(translate(rect->modelMat(), dvec3(0, 0, -100)));
+		gObjects.push_back(rect);
+	}
+	else if (mId == 1) {
+
+	}
 }
+//-------------------------------------------------------------------------
+void Scene::changeScene(int id) {
+	mId = id;
+	free();
+	resetGL();
+	init();
+}
+
 //-------------------------------------------------------------------------
 void Scene::free()
 { // release memory and resources   
@@ -29,6 +50,7 @@ void Scene::free()
 	{
 		delete el;  el = nullptr;
 	}
+	gObjects.clear();
 }
 //-------------------------------------------------------------------------
 void Scene::setGL()

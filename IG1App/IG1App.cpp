@@ -29,8 +29,6 @@ void IG1App::run()   // enters the main event processing loop
 		glutMainLoop();      // enters the main event processing loop 
 		mStop = true;  // main loop has stopped  
 	}
-
-	if(animacion) mScene->update();
 }
 //-------------------------------------------------------------------------
 
@@ -75,6 +73,7 @@ void IG1App::iniWinOpenGL()
 	glutKeyboardFunc(s_key);
 	glutSpecialFunc(s_specialKey);
 	glutDisplayFunc(s_display);
+	glutIdleFunc(s_update);
 	
 	cout << glGetString(GL_VERSION) << '\n';
 	cout << glGetString(GL_VENDOR) << '\n';
@@ -132,7 +131,13 @@ void IG1App::key(unsigned char key, int x, int y)
 		mCamera->set2D();
 		break;
 	case 'u':
-		animacion = true;
+		animation = !animation;
+		break;
+	case '0':
+		mScene->changeScene(0);
+		break;
+	case '1':
+		mScene->changeScene(1);
 		break;
 	default:
 		need_redisplay = false;
@@ -178,3 +183,14 @@ void IG1App::specialKey(int key, int x, int y)
 }
 //-------------------------------------------------------------------------
 
+void IG1App::update() {
+	if (animation) {
+		GLuint mLastUpdateTime = 0;
+		int timer = glutGet(GLUT_ELAPSED_TIME);
+		if ((timer-mLastUpdateTime) >= 1000 / 60) {
+			mScene->update();
+			mLastUpdateTime = timer;
+			glutPostRedisplay();
+		}
+	}
+}

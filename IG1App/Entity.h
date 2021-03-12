@@ -70,6 +70,13 @@ public:
 	explicit TrianguloRGB(GLdouble rd);
 	~TrianguloRGB();
 	virtual void render(glm::dmat4 const& modelViewMat) const;
+	virtual void update();
+	void setAnimation(bool anim) { animation = anim; };
+
+protected:
+	bool animation = false;
+	GLdouble ang1 = 0;
+	GLdouble ang2 = 0;
 };
 
 class RectanguloRGB : public Abs_Entity

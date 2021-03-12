@@ -113,6 +113,14 @@ void TrianguloRGB::render(dmat4 const& modelViewMat) const
 	}
 }
 
+void TrianguloRGB::update() {
+	ang1++; ang2--;
+	double x = 200 * sin(radians(ang1));
+	double y = 200 * cos(radians(ang1));
+	mModelMat = translate(dmat4(1), dvec3(x, y, 0));
+	mModelMat = rotate(mModelMat, radians(ang2), dvec3(0, 0, 1));
+}
+
 RectanguloRGB::RectanguloRGB(GLdouble w, GLdouble h)
 {
 	mMesh = Mesh::generaRectanguloRGB(w, h);

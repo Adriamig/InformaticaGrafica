@@ -26,6 +26,8 @@ public:
 
 	void render(Camera const& cam) const;
 
+	void changeScene(int id);
+
 protected:
 	void free();
 	void setGL();

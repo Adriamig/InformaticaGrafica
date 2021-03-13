@@ -13,6 +13,9 @@ void Scene::init()
 	// allocate memory and load resources
 	// Lights
 	// Textures
+	Texture* t = new Texture();
+	t->load("container");
+	gTextures.push_back(t);
 
 	// Graphics objects (entities) of the scene
 	gObjects.push_back(new EjesRGB(400.0));
@@ -31,7 +34,8 @@ void Scene::init()
 		gObjects.push_back(rect);
 	}
 	else if (mId == 1) {
-
+		//gObjects.push_back(new Estrella3D(100, 6, 80));
+		gObjects.push_back(new Caja(100));
 	}
 }
 //-------------------------------------------------------------------------
@@ -51,6 +55,10 @@ void Scene::free()
 		delete el;  el = nullptr;
 	}
 	gObjects.clear();
+
+	for (Texture* el : gTextures) {
+		delete el;  el = nullptr;
+	}
 }
 //-------------------------------------------------------------------------
 void Scene::setGL()
@@ -58,13 +66,15 @@ void Scene::setGL()
 	// OpenGL basic setting
 	glClearColor(0.0, 0.0, 0.0, 1.0);  // background color (alpha=1 -> opaque)
 	glEnable(GL_DEPTH_TEST);  // enable Depth test 
+	glEnable(GL_TEXTURE_2D);
 
 }
 //-------------------------------------------------------------------------
 void Scene::resetGL()
 {
 	glClearColor(.0, .0, .0, .0);  // background color (alpha=1 -> opaque)
-	glDisable(GL_DEPTH_TEST);  // disable Depth test 	
+	glDisable(GL_DEPTH_TEST);  // disable Depth test 
+	glDisable(GL_TEXTURE_2D);
 }
 //-------------------------------------------------------------------------
 

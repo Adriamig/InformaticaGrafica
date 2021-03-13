@@ -36,6 +36,12 @@
     <ClInclude Include="CheckML.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="Pixmap32RGBA.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scene.cpp">
@@ -59,5 +65,43 @@
     <ClCompile Include="IG1App.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
+    <ClCompile Include="Pixmap32RGBA.cpp">
+      <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Bmps\baldosaC.bmp">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
+    <Image Include="..\Bmps\baldosaF.bmp">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
+    <Image Include="..\Bmps\baldosaP.bmp">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
+    <Image Include="..\Bmps\container.bmp">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
+    <Image Include="..\Bmps\grass.bmp">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
+    <Image Include="..\Bmps\noche.bmp">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
+    <Image Include="..\Bmps\papelC.bmp">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
+    <Image Include="..\Bmps\papelE.bmp">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
+    <Image Include="..\Bmps\windowC.bmp">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
+    <Image Include="..\Bmps\windowV.bmp">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
   </ItemGroup>
 </Project>

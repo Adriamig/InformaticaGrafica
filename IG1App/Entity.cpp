@@ -1,4 +1,5 @@
 #include "Entity.h"
+#include "Texture.h"
 
 #include <gtc/matrix_transform.hpp>  
 #include <gtc/type_ptr.hpp>
@@ -145,3 +146,59 @@ void RectanguloRGB::render(dmat4 const& modelViewMat) const
 	}
 }
 //-------------------------------------------------------------------------
+
+Estrella3D::Estrella3D(GLdouble re, GLuint np, GLdouble h)
+{
+	mMesh = Mesh::generaEstrella3D(re, np, h);
+}
+
+Estrella3D::~Estrella3D()
+{
+	delete mMesh;
+	mMesh = nullptr;
+}
+
+void Estrella3D::render(dmat4 const& modelViewMat) const
+{
+	if (mMesh != nullptr)
+	{
+		dmat4 aMat = modelViewMat * mModelMat;
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		upload(aMat);
+		mMesh->render();
+		aMat = modelViewMat * rotate(mModelMat, radians(180.0), dvec3(1, 0, 0));
+		upload(aMat);
+		mMesh->render();
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	}
+}
+
+void Estrella3D::update() {
+	mModelMat = rotate(mModelMat, radians(angZ), dvec3(0, 0, 1));
+	mModelMat = rotate(mModelMat, radians(angY), dvec3(0, 1, 0));
+}
+//-------------------------------------------------------------------------
+Caja::Caja(GLdouble ld)
+{
+	mMesh = Mesh::generaContCubo(ld);
+}
+
+Caja::~Caja()
+{
+	delete mMesh;
+	mMesh = nullptr;
+}
+
+void Caja::render(dmat4 const& modelViewMat) const
+{
+	if (mMesh != nullptr)
+	{
+		dmat4 aMat = modelViewMat * mModelMat;
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		mTexture->bind();
+		upload(aMat);
+		mMesh->render();
+		mTexture->unbind();
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	}
+}

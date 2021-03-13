@@ -194,11 +194,9 @@ void Caja::render(dmat4 const& modelViewMat) const
 	if (mMesh != nullptr)
 	{
 		dmat4 aMat = modelViewMat * mModelMat;
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		mTexture->bind();
+		mTexture->bind(GL_REPLACE);
 		upload(aMat);
 		mMesh->render();
 		mTexture->unbind();
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
 }

@@ -14,11 +14,12 @@ void Scene::init()
 	// Lights
 	// Textures
 	Texture* t = new Texture();
-	t->load("container");
+	t->load("..\\Bmps\\container.bmp");
 	gTextures.push_back(t);
 
 	// Graphics objects (entities) of the scene
 	gObjects.push_back(new EjesRGB(400.0));
+
 	if (mId == 0) {
 		gObjects.push_back(new Poligono(200, 45, { 1.0, 0, 1.0, 1.0 }));
 		gObjects.push_back(new Poligono(200, 3, { 1.0, 1.0, 0, 1.0 }));
@@ -35,7 +36,9 @@ void Scene::init()
 	}
 	else if (mId == 1) {
 		//gObjects.push_back(new Estrella3D(100, 6, 80));
-		gObjects.push_back(new Caja(100));
+		auto c = new Caja(100);
+		c->setTexture(gTextures.back());
+		gObjects.push_back(c);
 	}
 }
 //-------------------------------------------------------------------------
@@ -59,6 +62,7 @@ void Scene::free()
 	for (Texture* el : gTextures) {
 		delete el;  el = nullptr;
 	}
+	gTextures.clear();
 }
 //-------------------------------------------------------------------------
 void Scene::setGL()

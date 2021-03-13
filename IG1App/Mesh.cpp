@@ -192,5 +192,20 @@ Mesh* Mesh::generaContCubo(GLdouble ld) {
 	mesh->vVertices.emplace_back(-m, m, m);
 	mesh->vVertices.emplace_back(-m, -m, m);
 
+
+	mesh->vTexCoords.reserve(12);
+	mesh->vTexCoords.emplace_back(0, 1);
+	mesh->vTexCoords.emplace_back(0, 0);
+	mesh->vTexCoords.emplace_back(1, 1);
+	mesh->vTexCoords.emplace_back(1, 0);
+	mesh->vTexCoords.emplace_back(0, 1);
+	mesh->vTexCoords.emplace_back(0, 0);
+	mesh->vTexCoords.emplace_back(1, 1);
+	mesh->vTexCoords.emplace_back(1, 0);
+	mesh->vTexCoords.emplace_back(0, 1);
+	mesh->vTexCoords.emplace_back(0, 0);
+	mesh->vTexCoords.emplace_back(1, 1);
+	mesh->vTexCoords.emplace_back(1, 0);
+
 	return mesh;
 }

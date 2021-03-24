@@ -35,6 +35,7 @@ protected:
 	glm::dvec4 mColor;
 	glm::dvec4 blanco = { 1.0, 1.0, 1.0, 1.0 };
 	Texture* mTexture = nullptr;
+	Texture* mTexture2 = nullptr;
 
 	// transfers modelViewMat to the GPU
 	virtual void upload(glm::dmat4 const& mModelViewMat) const;
@@ -111,5 +112,21 @@ public:
 	~Caja();
 	virtual void render(glm::dmat4 const& modelViewMat) const;
 
+};
+
+class Suelo : public Abs_Entity
+{
+public:
+	explicit Suelo(GLdouble w, GLdouble h, GLuint rw, GLuint rh);
+	~Suelo();
+	virtual void render(glm::dmat4 const& modelViewMat) const;
+};
+
+class Foto : public Abs_Entity
+{
+public:
+	explicit Foto();
+	~Foto();
+	virtual void render(glm::dmat4 const& modelViewMat) const;
 };
 #endif //_H_Entities_H_

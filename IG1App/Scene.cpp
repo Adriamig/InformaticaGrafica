@@ -16,6 +16,15 @@ void Scene::init()
 	Texture* t = new Texture();
 	t->load("..\\Bmps\\container.bmp");
 	gTextures.push_back(t);
+	Texture* bC = new Texture();
+	bC->load("..\\Bmps\\baldosaC.bmp");
+	gTextures.push_back(bC);
+	Texture* bP = new Texture();
+	bP->load("..\\Bmps\\baldosaP.bmp");
+	gTextures.push_back(bP);
+	Texture* pC = new Texture();
+	pC->load("..\\Bmps\\papelC.bmp");
+	gTextures.push_back(pC);
 
 	// Graphics objects (entities) of the scene
 	gObjects.push_back(new EjesRGB(400.0));
@@ -35,10 +44,15 @@ void Scene::init()
 		gObjects.push_back(rect);
 	}
 	else if (mId == 1) {
-		//gObjects.push_back(new Estrella3D(100, 6, 80));
+		/*auto e3D = new Estrella3D(100, 6, 80);
+		e3D->setTexture(bP);
+		gObjects.push_back(e3D);*/
 		auto c = new Caja(100);
-		c->setTexture(gTextures.back());
+		c->setTexture(t);
 		gObjects.push_back(c);
+		auto s = new Suelo(500, 400, 10, 8);
+		s->setTexture(bC);
+		gObjects.push_back(s);
 	}
 }
 //-------------------------------------------------------------------------

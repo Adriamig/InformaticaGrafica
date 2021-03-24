@@ -128,10 +128,10 @@ Mesh* Mesh::generaRectangulo(GLdouble w, GLdouble h)
 	mesh->mPrimitive = GL_TRIANGLE_STRIP;
 	mesh->mNumVertices = 4;
 	mesh->vVertices.reserve(mesh->mNumVertices);
-	mesh->vVertices.emplace_back(-w / 2, h / 2, 0);
-	mesh->vVertices.emplace_back(-w / 2, -h / 2, 0);
-	mesh->vVertices.emplace_back(w / 2, h / 2, 0);
-	mesh->vVertices.emplace_back(w / 2, -h / 2, 0);
+	mesh->vVertices.emplace_back(-w / 2, h / 2, 50);
+	mesh->vVertices.emplace_back(-w / 2, -h / 2, 50);
+	mesh->vVertices.emplace_back(w / 2, h / 2, 50);
+	mesh->vVertices.emplace_back(w / 2, -h / 2, 50);
 
 	return mesh;
 }
@@ -192,6 +192,39 @@ Mesh* Mesh::generaContCubo(GLdouble ld) {
 	mesh->vVertices.emplace_back(-m, m, m);
 	mesh->vVertices.emplace_back(-m, -m, m);
 
+	return mesh;
+}
+
+Mesh* Mesh::generaRectanguloTexCor(GLdouble w, GLdouble h, GLuint rw, GLuint rh)
+{
+	Mesh* mesh = generaRectangulo(w, h);
+
+	mesh->vTexCoords.reserve(mesh->mNumVertices);
+	mesh->vTexCoords.emplace_back(0, rh);
+	mesh->vTexCoords.emplace_back(0, 0);
+	mesh->vTexCoords.emplace_back(rw, rh);
+	mesh->vTexCoords.emplace_back(rw, 0);
+
+	return mesh;
+}
+
+Mesh* Mesh::generaEstrellaTexCor(GLdouble re, GLuint np, GLdouble h)
+{
+	Mesh* mesh = generaEstrella3D(re, np, h);
+
+	mesh->vTexCoords.reserve(mesh->mNumVertices);
+	for (int i = 0; i <= np; i++)
+	{
+		mesh->vTexCoords.emplace_back(0.5, 0.5);
+		mesh->vTexCoords.emplace_back(0, 0);
+		mesh->vTexCoords.emplace_back(0.5, 0);
+	}
+	return mesh;
+}
+
+Mesh* Mesh::generaContCuboTexCor(GLdouble nl)
+{
+	Mesh* mesh = generaContCubo(nl);
 
 	mesh->vTexCoords.reserve(12);
 	mesh->vTexCoords.emplace_back(0, 1);

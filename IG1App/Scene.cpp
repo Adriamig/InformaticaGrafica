@@ -9,7 +9,7 @@ using namespace glm;
 void Scene::init()
 {
 	setGL();  // OpenGL settings
-
+	//glEnable(GL_DEPTH_TEST);
 	// allocate memory and load resources
 	// Lights
 	// Textures
@@ -25,6 +25,9 @@ void Scene::init()
 	Texture* pC = new Texture();
 	pC->load("..\\Bmps\\papelC.bmp");
 	gTextures.push_back(pC);
+	Texture* wV = new Texture();
+	wV->load("..\\Bmps\\windowV.bmp", 100);
+	gTextures.push_back(wV);
 
 	// Graphics objects (entities) of the scene
 	gObjects.push_back(new EjesRGB(400.0));
@@ -44,16 +47,30 @@ void Scene::init()
 		gObjects.push_back(rect);
 	}
 	else if (mId == 1) {
-		/*auto e3D = new Estrella3D(100, 6, 80);
+		auto e3D = new Estrella3D(50, 4, 40);
 		e3D->setTexture(bP);
-		gObjects.push_back(e3D);*/
-		auto c = new Caja(100);
-		c->setTexture(t);
+		e3D->setModelMat(translate(e3D->modelMat(), dvec3(-150, 150, -150)));
+		gObjects.push_back(e3D);
+		auto c = new CajaConFondo(50);
+		c->setTexture(t, pC);
+		c->setModelMat(translate(c->modelMat(), dvec3(-215, 25, -215)));
 		gObjects.push_back(c);
-		auto s = new Suelo(500, 400, 10, 8);
+		auto s = new Suelo(500, 500, 10, 10);
 		s->setTexture(bC);
+		s->setModelMat(rotate(s->modelMat(), radians(90.0), dvec3(1, 0, 0)));
 		gObjects.push_back(s);
+		auto foto = new Foto();
+		foto->setModelMat(translate(foto->modelMat(), dvec3(0, 1, 0)));
+		foto->setModelMat(rotate(foto->modelMat(), radians(90.0), dvec3(1, 0, 0)));
+		foto->setTexture(new Texture());
+		gObjects.push_back(foto);
+		auto v = new Vidriera(500, 200);
+		v->setTexture(wV);
+		gObjects.push_back(v);
+		//gObjects.push_back(new Caja(100));
 	}
+
+
 }
 //-------------------------------------------------------------------------
 void Scene::changeScene(int id) {

@@ -128,10 +128,10 @@ Mesh* Mesh::generaRectangulo(GLdouble w, GLdouble h)
 	mesh->mPrimitive = GL_TRIANGLE_STRIP;
 	mesh->mNumVertices = 4;
 	mesh->vVertices.reserve(mesh->mNumVertices);
-	mesh->vVertices.emplace_back(-w / 2, h / 2, 50);
-	mesh->vVertices.emplace_back(-w / 2, -h / 2, 50);
-	mesh->vVertices.emplace_back(w / 2, h / 2, 50);
-	mesh->vVertices.emplace_back(w / 2, -h / 2, 50);
+	mesh->vVertices.emplace_back(-w / 2, h / 2, 0);
+	mesh->vVertices.emplace_back(-w / 2, -h / 2, 0);
+	mesh->vVertices.emplace_back(w / 2, h / 2, 0);
+	mesh->vVertices.emplace_back(w / 2, -h / 2, 0);
 
 	return mesh;
 }
@@ -144,6 +144,17 @@ Mesh* Mesh::generaRectanguloRGB(GLdouble w, GLdouble h)
 	mesh->vColors.emplace_back(1, 0.5, 0.5, 1);
 	mesh->vColors.emplace_back(0.5, 1, 0.5, 1);
 	mesh->vColors.emplace_back(0.5, 0.5, 1, 1);
+	return mesh;
+}
+
+Mesh* Mesh::generaRectanguloText(GLdouble w, GLdouble h)
+{
+	Mesh* mesh = generaRectangulo(w, h);
+	mesh->vTexCoords.reserve(mesh->mNumVertices);
+	mesh->vTexCoords.emplace_back(0, 1);
+	mesh->vTexCoords.emplace_back(0, 0);
+	mesh->vTexCoords.emplace_back(1, 1);
+	mesh->vTexCoords.emplace_back(1, 0);
 	return mesh;
 }
 
@@ -195,6 +206,48 @@ Mesh* Mesh::generaContCubo(GLdouble ld) {
 	return mesh;
 }
 
+
+Mesh* Mesh::generaContCuboConFondo(GLdouble ld) {
+	Mesh* mesh = new Mesh();
+
+	GLdouble m = ld / 2;
+
+	mesh->mPrimitive = GL_TRIANGLE_STRIP;
+	mesh->mNumVertices = 13;
+
+	mesh->vVertices.reserve(mesh->mNumVertices);
+	mesh->vVertices.emplace_back(-m, m, m);
+	mesh->vVertices.emplace_back(-m, -m, m);
+	mesh->vVertices.emplace_back(m, m, m);
+	mesh->vVertices.emplace_back(m, -m, m);
+	mesh->vVertices.emplace_back(m, m, -m);
+	mesh->vVertices.emplace_back(m, -m, -m);
+	mesh->vVertices.emplace_back(-m, m, -m);
+	mesh->vVertices.emplace_back(-m, -m, -m);
+	mesh->vVertices.emplace_back(-m, m, m);
+	mesh->vVertices.emplace_back(-m, -m, m);
+	mesh->vVertices.emplace_back(m, -m, m);
+	mesh->vVertices.emplace_back(-m, -m, -m);
+	mesh->vVertices.emplace_back(m, -m, -m);
+
+	mesh->vTexCoords.reserve(mesh->mNumVertices);
+	mesh->vTexCoords.emplace_back(0, 1);
+	mesh->vTexCoords.emplace_back(0, 0);
+	mesh->vTexCoords.emplace_back(1, 1);
+	mesh->vTexCoords.emplace_back(1, 0);
+	mesh->vTexCoords.emplace_back(0, 1);
+	mesh->vTexCoords.emplace_back(0, 0);
+	mesh->vTexCoords.emplace_back(1, 1);
+	mesh->vTexCoords.emplace_back(1, 0);
+	mesh->vTexCoords.emplace_back(0, 1);
+	mesh->vTexCoords.emplace_back(0, 0);
+	mesh->vTexCoords.emplace_back(1, 0);
+	mesh->vTexCoords.emplace_back(0, 1);
+	mesh->vTexCoords.emplace_back(1, 1);
+
+	return mesh;
+}
+
 Mesh* Mesh::generaRectanguloTexCor(GLdouble w, GLdouble h, GLuint rw, GLuint rh)
 {
 	Mesh* mesh = generaRectangulo(w, h);
@@ -213,12 +266,21 @@ Mesh* Mesh::generaEstrellaTexCor(GLdouble re, GLuint np, GLdouble h)
 	Mesh* mesh = generaEstrella3D(re, np, h);
 
 	mesh->vTexCoords.reserve(mesh->mNumVertices);
-	for (int i = 0; i <= np; i++)
-	{
-		mesh->vTexCoords.emplace_back(0.5, 0.5);
-		mesh->vTexCoords.emplace_back(0, 0);
-		mesh->vTexCoords.emplace_back(0.5, 0);
-	}
+	mesh->vTexCoords.emplace_back(0.5, 0.5);
+
+	//double xi = cos(radians((360.0 / np) * i));
+	//double yi = sin(radians((360.0 / np) * i));
+
+	mesh->vTexCoords.emplace_back(0, 0.5);
+	mesh->vTexCoords.emplace_back(0, 0);
+	mesh->vTexCoords.emplace_back(0.5, 0);
+	mesh->vTexCoords.emplace_back(1, 0);
+	mesh->vTexCoords.emplace_back(1, 0.5);
+	mesh->vTexCoords.emplace_back(1, 1);
+	mesh->vTexCoords.emplace_back(0.5, 1);
+	mesh->vTexCoords.emplace_back(0, 1);
+
+	mesh->vTexCoords.emplace_back(0, 0.5);
 	return mesh;
 }
 
@@ -226,7 +288,7 @@ Mesh* Mesh::generaContCuboTexCor(GLdouble nl)
 {
 	Mesh* mesh = generaContCubo(nl);
 
-	mesh->vTexCoords.reserve(12);
+	mesh->vTexCoords.reserve(mesh->mNumVertices);
 	mesh->vTexCoords.emplace_back(0, 1);
 	mesh->vTexCoords.emplace_back(0, 0);
 	mesh->vTexCoords.emplace_back(1, 1);
@@ -237,8 +299,41 @@ Mesh* Mesh::generaContCuboTexCor(GLdouble nl)
 	mesh->vTexCoords.emplace_back(1, 0);
 	mesh->vTexCoords.emplace_back(0, 1);
 	mesh->vTexCoords.emplace_back(0, 0);
+
+	return mesh;
+}
+
+Mesh* Mesh::generaVidriera(GLdouble ld, GLdouble h) {
+	Mesh* mesh = new Mesh();
+
+	GLdouble m = ld / 2;
+
+	mesh->mPrimitive = GL_TRIANGLE_STRIP;
+	mesh->mNumVertices = 10;
+
+	mesh->vVertices.reserve(mesh->mNumVertices);
+	mesh->vVertices.emplace_back(-m, h, m);
+	mesh->vVertices.emplace_back(-m, 0, m);
+	mesh->vVertices.emplace_back(m, h, m);
+	mesh->vVertices.emplace_back(m, 0, m);
+	mesh->vVertices.emplace_back(m, h, -m);
+	mesh->vVertices.emplace_back(m, 0, -m);
+	mesh->vVertices.emplace_back(-m, h, -m);
+	mesh->vVertices.emplace_back(-m, 0, -m);
+	mesh->vVertices.emplace_back(-m, h, m);
+	mesh->vVertices.emplace_back(-m, 0, m);
+
+	mesh->vTexCoords.reserve(mesh->mNumVertices);
+	mesh->vTexCoords.emplace_back(0, 1);
+	mesh->vTexCoords.emplace_back(0, 0);
 	mesh->vTexCoords.emplace_back(1, 1);
 	mesh->vTexCoords.emplace_back(1, 0);
+	mesh->vTexCoords.emplace_back(0, 1);
+	mesh->vTexCoords.emplace_back(0, 0);
+	mesh->vTexCoords.emplace_back(1, 1);
+	mesh->vTexCoords.emplace_back(1, 0);
+	mesh->vTexCoords.emplace_back(0, 1);
+	mesh->vTexCoords.emplace_back(0, 0);
 
 	return mesh;
 }

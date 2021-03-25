@@ -26,7 +26,7 @@ public:
 	glm::dmat4 const& modelMat() const { return mModelMat; };
 	void setModelMat(glm::dmat4 const& aMat) { mModelMat = aMat; };
 	void setColor(glm::dvec4 const& color) { mColor = color; };
-	void setTexture(Texture* tex) { mTexture = tex; };
+	void setTexture(Texture* tex, Texture* text2 = nullptr) { mTexture = tex; mTexture2 = text2; };
 
 protected:
 
@@ -100,8 +100,8 @@ public:
 	virtual void render(glm::dmat4 const& modelViewMat) const;
 	virtual void update();
 protected:
-	GLdouble angZ = 2;
-	GLdouble angY = 1;
+	GLdouble angZ = 0.1;
+	GLdouble angY = 0.2;
 };
 
 
@@ -111,7 +111,18 @@ public:
 	explicit Caja(GLdouble ld);
 	~Caja();
 	virtual void render(glm::dmat4 const& modelViewMat) const;
+	virtual void update();
+protected:
+	GLdouble angZ = 0.2;
 
+};
+
+class CajaConFondo : public Caja
+{
+public:
+	explicit CajaConFondo(GLdouble ld);
+	~CajaConFondo();
+	virtual void render(glm::dmat4 const& modelViewMat) const;
 };
 
 class Suelo : public Abs_Entity
@@ -127,6 +138,15 @@ class Foto : public Abs_Entity
 public:
 	explicit Foto();
 	~Foto();
+	virtual void render(glm::dmat4 const& modelViewMat) const;
+	virtual void update();
+};
+
+class Vidriera : public Abs_Entity
+{
+public:
+	explicit Vidriera(GLdouble ld, GLdouble h);
+	~Vidriera();
 	virtual void render(glm::dmat4 const& modelViewMat) const;
 };
 #endif //_H_Entities_H_

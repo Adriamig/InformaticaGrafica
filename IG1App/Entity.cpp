@@ -1,5 +1,6 @@
 #include "Entity.h"
 #include "Texture.h"
+#include "IG1App.h"
 
 #include <gtc/matrix_transform.hpp>  
 #include <gtc/type_ptr.hpp>
@@ -180,6 +181,7 @@ void Estrella3D::update() {
 	mModelMat = rotate(mModelMat, radians(angZ), dvec3(0, 0, 1));
 	mModelMat = rotate(mModelMat, radians(angY), dvec3(0, 1, 0));
 }
+
 //-------------------------------------------------------------------------
 Caja::Caja(GLdouble ld)
 {
@@ -198,9 +200,45 @@ void Caja::render(dmat4 const& modelViewMat) const
 	{
 		dmat4 aMat = modelViewMat * mModelMat;
 		glEnable(GL_CULL_FACE);
-		mTexture->bind(GL_REPLACE);
-		glCullFace(GL_FRONT / GL_BACK);
 		upload(aMat);
+		mTexture->bind(GL_REPLACE);
+		glCullFace(GL_BACK);
+		mMesh->render();
+		mTexture2->bind(GL_REPLACE);
+		glCullFace(GL_FRONT);
+		mMesh->render();
+		mTexture->unbind();
+		glDisable(GL_CULL_FACE);
+	}
+}
+
+void Caja::update() {
+	mModelMat = rotate(mModelMat, radians(angZ), dvec3(0, 0, 1));
+}
+
+CajaConFondo::CajaConFondo(GLdouble ld) : Caja(ld)
+{
+	mMesh = Mesh::generaContCuboConFondo(ld);
+}
+
+CajaConFondo::~CajaConFondo()
+{
+	delete mMesh;
+	mMesh = nullptr;
+}
+
+void CajaConFondo::render(dmat4 const& modelViewMat) const
+{
+	if (mMesh != nullptr)
+	{
+		dmat4 aMat = modelViewMat * mModelMat;
+		glEnable(GL_CULL_FACE);
+		upload(aMat);
+		mTexture->bind(GL_REPLACE);
+		glCullFace(GL_BACK);
+		mMesh->render();
+		mTexture2->bind(GL_REPLACE);
+		glCullFace(GL_FRONT);
 		mMesh->render();
 		mTexture->unbind();
 		glDisable(GL_CULL_FACE);
@@ -224,9 +262,64 @@ void Suelo::render(dmat4 const& modelViewMat) const
 	{
 		dmat4 aMat = modelViewMat * mModelMat;
 		mTexture->bind(GL_REPLACE);
-		aMat = modelViewMat * rotate(mModelMat, radians(90.0), dvec3(1, 0, 0));
 		upload(aMat);
 		mMesh->render();
 		mTexture->unbind();
+	}
+}
+
+Foto::Foto()
+{
+	mMesh = Mesh::generaRectanguloText(100, 50);
+}
+
+Foto::~Foto()
+{
+	delete mMesh;
+	mMesh = nullptr;
+}
+
+void Foto::render(dmat4 const& modelViewMat) const
+{
+	if (mMesh != nullptr)
+	{
+		dmat4 aMat = modelViewMat * mModelMat;
+		mTexture->bind(GL_REPLACE);
+		upload(aMat);
+		mMesh->render();
+		mTexture->unbind();
+	}
+}
+
+void Foto::update() {
+	mTexture->loadColorBuffer(IG1App::s_ig1app.winWidth(), IG1App::s_ig1app.winHeight(), GL_FRONT);
+}
+
+Vidriera::Vidriera(GLdouble ld, GLdouble h)
+{
+	mMesh = Mesh::generaVidriera(ld, h);
+}
+
+Vidriera::~Vidriera()
+{
+	delete mMesh;
+	mMesh = nullptr;
+}
+
+void Vidriera::render(dmat4 const& modelViewMat) const
+{
+	if (mMesh != nullptr)
+	{
+	    dmat4 aMat = modelViewMat * mModelMat;
+		glDepthMask(GL_FALSE);
+		glEnable(GL_BLEND);
+		glBlendFunc(1, GL_ONE_MINUS_SRC_ALPHA);
+		mTexture->bind(GL_REPLACE);
+		upload(aMat);
+		mMesh->render();
+		mTexture->unbind();
+		//glBlendFunc(1, 0);
+		glDepthMask(GL_TRUE);
+		glDisable(GL_BLEND);
 	}
 }

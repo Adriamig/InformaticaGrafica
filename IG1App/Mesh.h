@@ -19,11 +19,15 @@ public:
 	static Mesh* generaTrianguloRGB(GLdouble rd);
 	static Mesh* generaRectangulo(GLdouble w, GLdouble h);
 	static Mesh* generaRectanguloRGB(GLdouble w, GLdouble h);
+	static Mesh* generaRectanguloText(GLdouble w, GLdouble h);
 	static Mesh* generaEstrella3D(GLdouble re, GLuint np, GLdouble h);
 	static Mesh* generaContCubo(GLdouble ld);
+	static Mesh* generaContCuboConFondo(GLdouble ld);
 	static Mesh* generaRectanguloTexCor(GLdouble w, GLdouble h, GLuint rw, GLuint rh);
 	static Mesh* generaEstrellaTexCor(GLdouble re, GLuint np, GLdouble h);
 	static Mesh* generaContCuboTexCor(GLdouble nl);
+    static Mesh* generaVidriera(GLdouble ld, GLdouble h);
+
 
 	Mesh() {};
 	virtual ~Mesh() {};

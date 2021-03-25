@@ -131,6 +131,9 @@ void IG1App::key(unsigned char key, int x, int y)
 		mCamera->set2D();
 		break;
 	case 'u':
+		mScene->update();
+		break;
+	case 'U':
 		animation = !animation;
 		break;
 	case '0':

@@ -1,4 +1,4 @@
-#include "IG1App.h"
+﻿#include "IG1App.h"
 #include "CheckML.h"
 #include <iostream>
 
@@ -11,7 +11,7 @@ IG1App IG1App::s_ig1app;  // default constructor (constructor with no parameters
 
 //-------------------------------------------------------------------------
 
-void IG1App::close()  
+void IG1App::close()
 {
 	if (!mStop) {  // if main loop has not stopped
 		cout << "Closing glut...\n";
@@ -35,26 +35,26 @@ void IG1App::run()   // enters the main event processing loop
 void IG1App::init()
 {
 	// create an OpenGL Context
-	iniWinOpenGL();   
+	iniWinOpenGL();
 
 	// create the scene after creating the context 
 	// allocate memory and resources
 	mViewPort = new Viewport(mWinW, mWinH); //glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT)
 	mCamera = new Camera(mViewPort);
 	mScene = new Scene;
-	
+
 	mCamera->set2D();
 	mScene->init();
 
 }
 //-------------------------------------------------------------------------
 
-void IG1App::iniWinOpenGL() 
+void IG1App::iniWinOpenGL()
 {  // Initialization
 	cout << "Starting glut...\n";
 	int argc = 0;
 	glutInit(&argc, nullptr);
-		
+
 	glutInitContextVersion(3, 3);
 	glutInitContextProfile(GLUT_COMPATIBILITY_PROFILE);  // GLUT_CORE_PROFILE
 	glutInitContextFlags(GLUT_DEBUG);		// GLUT_FORWARD_COMPATIBLE
@@ -65,22 +65,22 @@ void IG1App::iniWinOpenGL()
 	//glutInitWindowPosition (140, 140);
 
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH /*| GLUT_STENCIL*/); // RGBA colors, double buffer, depth buffer and stencil buffer   
-	
+
 	mWinId = glutCreateWindow("IG1App");  // with its associated OpenGL context, return window's identifier 
-	
+
 	// Callback registration
 	glutReshapeFunc(s_resize);
 	glutKeyboardFunc(s_key);
 	glutSpecialFunc(s_specialKey);
 	glutDisplayFunc(s_display);
 	glutIdleFunc(s_update);
-	
+
 	cout << glGetString(GL_VERSION) << '\n';
 	cout << glGetString(GL_VENDOR) << '\n';
 }
 //-------------------------------------------------------------------------
 
-void IG1App::free() 
+void IG1App::free()
 {  // release memory and resources
 	delete mScene; mScene = nullptr;
 	delete mCamera; mCamera = nullptr;
@@ -88,18 +88,19 @@ void IG1App::free()
 }
 //-------------------------------------------------------------------------
 
-void IG1App::display() const   
+void IG1App::display()
 {  // double buffering
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // clears the back buffer
 
-	mScene->render(*mCamera);  // uploads the viewport and camera to the GPU
-	
+	if (m2Vistas) display2Vistas();
+	else mScene->render(*mCamera);  // uploads the viewport and camera to the GPU
+
 	glutSwapBuffers();	// swaps the front and back buffer
 }
 //-------------------------------------------------------------------------
 
-void IG1App::resize(int newWidth, int newHeight) 
+void IG1App::resize(int newWidth, int newHeight)
 {
 	mWinW = newWidth; mWinH = newHeight;
 
@@ -107,14 +108,14 @@ void IG1App::resize(int newWidth, int newHeight)
 	mViewPort->setSize(newWidth, newHeight);
 
 	// Resize Scene Visible Area such that the scale is not modified
-	mCamera->setSize(mViewPort->width(), mViewPort->height()); 
+	mCamera->setSize(mViewPort->width(), mViewPort->height());
 }
 //-------------------------------------------------------------------------
 
-void IG1App::key(unsigned char key, int x, int y) 
+void IG1App::key(unsigned char key, int x, int y)
 {
 	bool need_redisplay = true;
-	
+
 	switch (key) {
 	case 27:  // Escape key 
 		glutLeaveMainLoop();  // stops main loop and destroy the OpenGL context
@@ -142,6 +143,21 @@ void IG1App::key(unsigned char key, int x, int y)
 	case '1':
 		mScene->changeScene(1);
 		break;
+	case 'm':
+		mCamera->orbit(1, 0);
+		break;
+	case 'M':
+		mCamera->orbit(0, 10);
+		break;
+	case 'p':
+		mCamera->changePrj();
+		break;
+	case 't':
+		mCamera->setCenital();
+		break;
+	case 'k':
+		m2Vistas = !m2Vistas;
+		break;
 	default:
 		need_redisplay = false;
 		break;
@@ -152,29 +168,35 @@ void IG1App::key(unsigned char key, int x, int y)
 }
 //-------------------------------------------------------------------------
 
-void IG1App::specialKey(int key, int x, int y) 
+void IG1App::specialKey(int key, int x, int y)
 {
 	bool need_redisplay = true;
 	int mdf = glutGetModifiers(); // returns the modifiers (Shift, Ctrl, Alt)
-	
+
 	switch (key) {
 	case GLUT_KEY_RIGHT:
 		if (mdf == GLUT_ACTIVE_CTRL)
-			mCamera->pitch(-1);   // rotates -1 on the X axis
+			mCamera->moveLR(1);
+		//mCamera->pitch(-1);   // rotates -1 on the X axis
 		else
-			mCamera->pitch(1);    // rotates 1 on the X axis
+			mCamera->moveLR(-1);
+		//mCamera->pitch(1);    // rotates 1 on the X axis
 		break;
 	case GLUT_KEY_LEFT:
 		if (mdf == GLUT_ACTIVE_CTRL)
-		    mCamera->yaw(1);      // rotates 1 on the Y axis 
-		else 
-			mCamera->yaw(-1);     // rotate -1 on the Y axis 
+			mCamera->moveLR(-1);
+		//mCamera->yaw(1);      // rotates 1 on the Y axis 
+		else
+			mCamera->moveLR(1);
+		//mCamera->yaw(-1);     // rotate -1 on the Y axis 
 		break;
 	case GLUT_KEY_UP:
-		mCamera->roll(1);    // rotates 1 on the Z axis
+		mCamera->moveUD(-1);
+		//mCamera->roll(1);    // rotates 1 on the Z axis
 		break;
 	case GLUT_KEY_DOWN:
-		mCamera->roll(-1);   // rotates -1 on the Z axis
+		mCamera->moveUD(1);
+		//mCamera->roll(-1);   // rotates -1 on the Z axis
 		break;
 	default:
 		need_redisplay = false;
@@ -190,10 +212,38 @@ void IG1App::update() {
 	if (animation) {
 		GLuint mLastUpdateTime = 0;
 		int timer = glutGet(GLUT_ELAPSED_TIME);
-		if ((timer-mLastUpdateTime) >= 1000 / 60) {
+		if ((timer - mLastUpdateTime) >= 1000 / 60) {
 			mScene->update();
 			mLastUpdateTime = timer;
 			glutPostRedisplay();
 		}
 	}
+}
+
+void IG1App::display2Vistas()
+{
+	// para renderizar las vistas utilizamos una cámara auxiliar:
+	Camera auxCam = *mCamera; // copiando mCamera
+	// el puerto de vista queda compartido (se copia el puntero)
+	Viewport auxVP = *mViewPort; // lo copiamos en una var. aux. para
+	// el tamaño de los 4 puertos de vista es el mismo, lo configuramos
+	mViewPort->setSize(mWinW / 2, mWinH);
+	// igual que en resize, para que no cambie la escala,
+	// tenemos que cambiar el tamaño de la ventana de vista de la cámara
+	auxCam.setSize(mViewPort->width(), mViewPort->height());
+
+	mViewPort->setPos(0, 0);
+	// el tamaño de la ventana de vista es el mismo para las 4 vistas (ya configurado)
+	// y la posición y orientación de la cámara es la del usuario (ya configurado->copiado de mCamera)
+	// renderizamos con la cámara y el puerto de vista configurados
+	mScene->render(auxCam);
+	// el tamaño de los 4 puertos de vista es el mismo (ya configurado),
+	// pero tenemos que configurar la posición
+	mViewPort->setPos(mWinW / 2, 0);
+	// el tamaño de la ventana de vista es el mismo para las 4 vistas (ya configurado)
+	// pero tenemos que cambiar la posición y orientación de la cámara
+	auxCam.setCenital();
+	// renderizamos con la cámara y el puerto de vista configurados
+	mScene->render(auxCam);
+	*mViewPort = auxVP; // restaurar el puerto de vista  NOTA
 }

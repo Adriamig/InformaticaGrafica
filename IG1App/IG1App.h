@@ -46,7 +46,8 @@ protected:
 	void iniWinOpenGL();
 	void free();
 
-	void display() const;   // the scene
+	void display();   // the scene
+	void display2Vistas();
 	void resize(int newWidth, int newHeight);   // the viewport (without changing the scale) 
 	void key(unsigned char key, int x, int y);  // keypress event
 	void specialKey(int key, int x, int y);     // keypress event for special characters
@@ -72,6 +73,7 @@ protected:
 	int mWinH = 600;    // window's height
 
 	bool animation = false;
+	bool m2Vistas = false;
 };
 //-------------------------------------------------------------------------
 

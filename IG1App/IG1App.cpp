@@ -74,6 +74,9 @@ void IG1App::iniWinOpenGL()
 	glutSpecialFunc(s_specialKey);
 	glutDisplayFunc(s_display);
 	glutIdleFunc(s_update);
+	glutMouseFunc(s_mouse);
+	glutMotionFunc(s_motion);
+	glutMouseWheelFunc(s_mouseWheel);
 
 	cout << glGetString(GL_VERSION) << '\n';
 	cout << glGetString(GL_VENDOR) << '\n';
@@ -246,4 +249,46 @@ void IG1App::display2Vistas()
 	// renderizamos con la cámara y el puerto de vista configurados
 	mScene->render(auxCam);
 	*mViewPort = auxVP; // restaurar el puerto de vista  NOTA
+}
+
+void IG1App::mouse(int button, int state, int x, int y)
+{
+	//y = glutGet(GLUT_WINDOW_HEIGHT) - y;
+	mBot = button;
+	mCoord.x = x;
+	mCoord.y = y;
+}
+
+void IG1App::motion(int x, int y)
+{
+	glm::dvec2 mp;
+	mp.x = mCoord.x - x;
+	mp.y = mCoord.y - y;
+
+	mCoord.x = x;
+	mCoord.y = y;
+
+	if (mBot == GLUT_LEFT_BUTTON)
+		mCamera->orbit(mp.x * 0.05, mp.y);
+	else if (mBot == GLUT_RIGHT_BUTTON)
+	{
+		mCamera->moveUD(mp.y);
+		mCamera->moveLR(mp.x);
+	}
+
+	glutPostRedisplay();
+}
+
+void IG1App::mouseWheel(int n, int d, int x, int y)
+{
+	int m = glutGetModifiers();
+	if (m == 0)
+		mCamera->moveFB(d);
+	else
+	{
+		if (GLUT_ACTIVE_CTRL)
+			mCamera->setScale(d);
+	}
+
+	glutPostRedisplay();
 }

@@ -50,7 +50,7 @@ public:
 	glm::dvec3 mUpward;
 	glm::dvec3 mFront;
 
-	GLdouble mAng = 0, mRadio = 1000;
+	GLdouble mAng = -45, mRadio = 1000;
 
 	void orbit(GLdouble incAng, GLdouble incY);
 	void changePrj();

@@ -97,7 +97,7 @@ void IG1App::display()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // clears the back buffer
 
 	if (m2Vistas) display2Vistas();
-	else mScene->render(*mCamera);  // uploads the viewport and camera to the GPU
+	else  display2Scenes();  // uploads the viewport and camera to the GPU
 
 	glutSwapBuffers();	// swaps the front and back buffer
 }
@@ -154,9 +154,6 @@ void IG1App::key(unsigned char key, int x, int y)
 		break;
 	case 'p':
 		mCamera->changePrj();
-		break;
-	case 't':
-		mCamera->setCenital();
 		break;
 	case 'k':
 		m2Vistas = !m2Vistas;
@@ -225,31 +222,41 @@ void IG1App::update() {
 
 void IG1App::display2Vistas()
 {
-	// para renderizar las vistas utilizamos una cámara auxiliar:
-	Camera auxCam = *mCamera; // copiando mCamera
-	// el puerto de vista queda compartido (se copia el puntero)
-	Viewport auxVP = *mViewPort; // lo copiamos en una var. aux. para
-	// el tamaño de los 4 puertos de vista es el mismo, lo configuramos
+	Camera auxCam = *mCamera;
+
+	Viewport auxVP = *mViewPort; 
+
 	mViewPort->setSize(mWinW / 2, mWinH);
-	// igual que en resize, para que no cambie la escala,
-	// tenemos que cambiar el tamaño de la ventana de vista de la cámara
 	auxCam.setSize(mViewPort->width(), mViewPort->height());
 
 	mViewPort->setPos(0, 0);
-	// el tamaño de la ventana de vista es el mismo para las 4 vistas (ya configurado)
-	// y la posición y orientación de la cámara es la del usuario (ya configurado->copiado de mCamera)
-	// renderizamos con la cámara y el puerto de vista configurados
 	mScene->render(auxCam);
-	// el tamaño de los 4 puertos de vista es el mismo (ya configurado),
-	// pero tenemos que configurar la posición
 	mViewPort->setPos(mWinW / 2, 0);
-	// el tamaño de la ventana de vista es el mismo para las 4 vistas (ya configurado)
-	// pero tenemos que cambiar la posición y orientación de la cámara
+
 	auxCam.setCenital();
-	// renderizamos con la cámara y el puerto de vista configurados
 	mScene->render(auxCam);
-	*mViewPort = auxVP; // restaurar el puerto de vista  NOTA
+	*mViewPort = auxVP;
 }
+
+void IG1App::display2Scenes()
+{
+	Camera auxCam = *mCamera;
+
+	Viewport auxVP = *mViewPort;
+
+	mViewPort->setSize(mWinW / 2, mWinH);
+	auxCam.setSize(mViewPort->width(), mViewPort->height());
+
+	mViewPort->setPos(0, 0);
+	mScene->changeScene(1);
+	mScene->render(auxCam);
+	mViewPort->setPos(mWinW / 2, 0);
+
+	mScene->changeScene(0);
+	mScene->render(auxCam);
+	*mViewPort = auxVP;
+}
+
 
 void IG1App::mouse(int button, int state, int x, int y)
 {

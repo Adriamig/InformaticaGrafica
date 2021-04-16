@@ -117,12 +117,15 @@ protected:
 
 };
 
-class CajaConFondo : public Caja
+class CajaConFondo : public Abs_Entity
 {
 public:
 	explicit CajaConFondo(GLdouble ld);
 	~CajaConFondo();
 	virtual void render(glm::dmat4 const& modelViewMat) const;
+	virtual void update();
+protected:
+	GLdouble angZ = 0.2;
 };
 
 class Suelo : public Abs_Entity

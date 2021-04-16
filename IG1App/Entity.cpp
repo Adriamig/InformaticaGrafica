@@ -216,7 +216,7 @@ void Caja::update() {
 	mModelMat = rotate(mModelMat, radians(angZ), dvec3(0, 0, 1));
 }
 
-CajaConFondo::CajaConFondo(GLdouble ld) : Caja(ld)
+CajaConFondo::CajaConFondo(GLdouble ld)
 {
 	mMesh = Mesh::generaContCuboConFondo(ld);
 }
@@ -243,6 +243,10 @@ void CajaConFondo::render(dmat4 const& modelViewMat) const
 		mTexture->unbind();
 		glDisable(GL_CULL_FACE);
 	}
+}
+
+void CajaConFondo::update() {
+	mModelMat = rotate(mModelMat, radians(angZ), dvec3(0, 0, 1));
 }
 
 Suelo::Suelo(GLdouble w, GLdouble h, GLuint rw, GLuint rh)

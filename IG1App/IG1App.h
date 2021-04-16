@@ -48,6 +48,7 @@ protected:
 
 	void display();   // the scene
 	void display2Vistas();
+	void display2Scenes();
 	void resize(int newWidth, int newHeight);   // the viewport (without changing the scale) 
 	void key(unsigned char key, int x, int y);  // keypress event
 	void specialKey(int key, int x, int y);     // keypress event for special characters
@@ -82,6 +83,7 @@ protected:
 
 	bool animation = false;
 	bool m2Vistas = false;
+	bool m2Scenes = false;
 	glm::dvec2 mCoord;
 	int mBot = 0;
 };

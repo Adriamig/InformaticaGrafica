@@ -62,7 +62,9 @@ void Scene::init()
 		auto foto = new Foto();
 		foto->setModelMat(translate(foto->modelMat(), dvec3(0, 1, 0)));
 		foto->setModelMat(rotate(foto->modelMat(), radians(90.0), dvec3(1, 0, 0)));
-		foto->setTexture(new Texture());
+		auto t = new Texture();
+		gTextures.push_back(t);
+		foto->setTexture(t);
 		gObjects.push_back(foto);
 		auto v = new Vidriera(500, 200);
 		v->setTexture(wV);
@@ -76,7 +78,6 @@ void Scene::init()
 void Scene::changeScene(int id) {
 	mId = id;
 	free();
-	resetGL();
 	init();
 }
 

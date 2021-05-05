@@ -73,8 +73,10 @@ protected:
 	Viewport* mViewPort = nullptr;
 	// Camera position, view volume and projection
 	Camera* mCamera = nullptr;
+	Camera* mCamera2 = nullptr;
 	// Graphics objects of the scene
 	Scene* mScene = nullptr;
+	Scene* mScene2 = nullptr;
 
 	bool mStop = false; // main event processing loop
 	int mWinId = 0;	    // window's identifier
@@ -82,8 +84,14 @@ protected:
 	int mWinH = 600;    // window's height
 
 	bool animation = false;
+	bool animation2 = false;
+
 	bool m2Vistas = false;
 	bool m2Scenes = false;
+
+	bool proyeccion = true;
+	bool proyeccion2 = true;
+
 	glm::dvec2 mCoord;
 	int mBot = 0;
 };

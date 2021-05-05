@@ -72,7 +72,6 @@ void Scene::init()
 		//gObjects.push_back(new Caja(100));
 	}
 
-
 }
 //-------------------------------------------------------------------------
 void Scene::changeScene(int id) {

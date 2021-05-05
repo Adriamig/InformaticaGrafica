@@ -314,7 +314,7 @@ void Vidriera::render(dmat4 const& modelViewMat) const
 {
 	if (mMesh != nullptr)
 	{
-	    dmat4 aMat = modelViewMat * mModelMat;
+		dmat4 aMat = modelViewMat * mModelMat;
 		glDepthMask(GL_FALSE);
 		glEnable(GL_BLEND);
 		glBlendFunc(1, GL_ONE_MINUS_SRC_ALPHA);

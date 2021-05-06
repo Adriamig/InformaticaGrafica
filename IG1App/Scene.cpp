@@ -87,7 +87,7 @@ void Scene::init()
 		glClearColor(0.7, 0.8, 0.9, 0.0);
 		gObjects.push_back(new EjesRGB(400));
 
-		Sphere* sphere = new Sphere(100.0);
+		/*Sphere* sphere = new Sphere(100.0);
 		gObjects.push_back(sphere);
 
 		Cylinder* cono = new Cylinder(50.0, 0.0, 100.0);
@@ -95,7 +95,10 @@ void Scene::init()
 		mAux = translate(mAux, dvec3(0, 85, 0));
 		mAux = rotate(mAux, radians(-90.0), dvec3(1.0, 0, 0));
 		cono->setModelMat(mAux);
-		gObjects.push_back(cono);
+		gObjects.push_back(cono);*/
+
+		AnilloCuadrado* anillo = new AnilloCuadrado();
+		gObjects.push_back(anillo);
 
 		/*Disk* disk = new Disk(10.0, 75.0);
 		gObjects.push_back(disk);*/

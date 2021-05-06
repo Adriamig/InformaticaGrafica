@@ -15,6 +15,7 @@ public:
 
 	static Mesh* createRGBAxes(GLdouble l); // creates a new 3D-RGB axes mesh
 	static Mesh* generaPoligono(GLuint numL, GLdouble rd);
+	static Mesh* generaPoligonoConFondo(GLuint numL, GLdouble rd);
 	static Mesh* generaSierpinski(GLuint numP, GLdouble rd);
 	static Mesh* generaTrianguloRGB(GLdouble rd);
 	static Mesh* generaRectangulo(GLdouble w, GLdouble h);
@@ -48,6 +49,7 @@ protected:
 	std::vector<glm::dvec3> vVertices;  // vertex array
 	std::vector<glm::dvec4> vColors;    // color array
 	std::vector<glm::dvec2> vTexCoords;
+	std::vector<glm::dvec3> vNormals;
 	virtual void draw() const;
 };
 //-------------------------------------------------------------------------

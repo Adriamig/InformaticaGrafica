@@ -7,6 +7,7 @@
 
 #include "Mesh.h"
 #include "Texture.h"
+#include "IndexMesh.h"
 
 //-------------------------------------------------------------------------
 
@@ -57,6 +58,14 @@ class Poligono : public Abs_Entity
 public:
 	explicit Poligono(GLdouble rd, GLuint numL, glm::dvec4 color);
 	~Poligono();
+	virtual void render(glm::dmat4 const& modelViewMat) const;
+};
+
+class PoligonoConFondo : public Abs_Entity
+{
+public:
+	explicit PoligonoConFondo(GLdouble rd, GLuint numL, glm::dvec4 color);
+	~PoligonoConFondo();
 	virtual void render(glm::dmat4 const& modelViewMat) const;
 };
 
@@ -150,6 +159,14 @@ class Vidriera : public Abs_Entity
 public:
 	explicit Vidriera(GLdouble ld, GLdouble h);
 	~Vidriera();
+	virtual void render(glm::dmat4 const& modelViewMat) const;
+};
+
+class AnilloCuadrado : public Abs_Entity
+{
+public:
+	explicit AnilloCuadrado();
+	~AnilloCuadrado();
 	virtual void render(glm::dmat4 const& modelViewMat) const;
 };
 #endif //_H_Entities_H_

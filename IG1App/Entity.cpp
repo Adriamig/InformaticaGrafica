@@ -59,9 +59,12 @@ void Poligono::render(dmat4 const& modelViewMat) const
 		dmat4 aMat = modelViewMat * mModelMat;  // glm matrix multiplication
 		upload(aMat);
 		glColor3d(mColor.r, mColor.g, mColor.b);
+		mTexture->bind(GL_REPLACE);
 		mMesh->render();
-		glLineWidth(1);
+		/*glLineWidth(1);*/
 		glColor3d(1, 1, 1);
+		mTexture->unbind();
+
 	}
 }
 
@@ -325,5 +328,26 @@ void Vidriera::render(dmat4 const& modelViewMat) const
 		//glBlendFunc(1, 0);
 		glDepthMask(GL_TRUE);
 		glDisable(GL_BLEND);
+	}
+}
+
+AnilloCuadrado::AnilloCuadrado()
+{
+	mMesh = IndexMesh::generaAnilloCuadradoIndexado();
+}
+
+AnilloCuadrado::~AnilloCuadrado()
+{
+	delete mMesh;
+	mMesh = nullptr;
+}
+
+void AnilloCuadrado::render(dmat4 const& modelViewMat) const
+{
+	if (mMesh != nullptr)
+	{
+		dmat4 aMat = modelViewMat * mModelMat;
+		upload(aMat);
+		mMesh->render();
 	}
 }

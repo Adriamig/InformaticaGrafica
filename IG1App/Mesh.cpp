@@ -26,12 +26,18 @@ void Mesh::render() const
 			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 			glTexCoordPointer(2, GL_DOUBLE, 0, vTexCoords.data());
 		}
+		if (vNormals.size() > 0)
+		{
+			glEnableClientState(GL_NORMAL_ARRAY);
+			glNormalPointer(GL_DOUBLE, 0, vNormals.data());
+		}
 
 		draw();
 
 		glDisableClientState(GL_COLOR_ARRAY);
 		glDisableClientState(GL_VERTEX_ARRAY);
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+		glDisableClientState(GL_NORMAL_ARRAY);
 	}
 }
 //-------------------------------------------------------------------------
@@ -83,6 +89,30 @@ Mesh* Mesh::generaPoligono(GLuint numL, GLdouble rd)
 		double x = rd * cos(radians(90.0 + (360.0 / numL) * i));
 		double y = rd * sin(radians(90.0 + (360.0 / numL) * i));
 		mesh->vVertices.emplace_back(x, y, 0.0);
+	}
+	return mesh;
+}
+
+Mesh* Mesh::generaPoligonoConFondo(GLuint numL, GLdouble rd)
+{
+	Mesh* mesh = new Mesh();
+
+	mesh->mPrimitive = GL_LINE_LOOP;
+
+	mesh->mNumVertices = numL;
+	mesh->vVertices.reserve(mesh->mNumVertices);
+
+	for (int i = 0; i < numL; i++)
+	{
+		double x = rd * cos(radians(90.0 + (360.0 / numL) * i));
+		double y = rd * sin(radians(90.0 + (360.0 / numL) * i));
+		mesh->vVertices.emplace_back(x, y, 0.0);
+	}
+
+	mesh->vTexCoords.reserve(mesh->mNumVertices);
+	for (int i = 0; i < numL; i++)
+	{
+
 	}
 	return mesh;
 }

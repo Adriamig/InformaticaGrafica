@@ -8,6 +8,7 @@
 #include "Camera.h"
 #include "Entity.h"
 #include "Texture.h"
+#include "QuadricEntity.h"
 
 #include <vector>
 
@@ -28,6 +29,8 @@ public:
 	void render(Camera const& cam) const;
 
 	void changeScene(int id);
+
+	void sceneDirLight(Camera const& cam) const;
 
 protected:
 	void free();

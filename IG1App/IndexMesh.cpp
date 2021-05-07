@@ -6,7 +6,6 @@ using namespace glm;
 
 void IndexMesh::render() const
 {
-	
 	if (vVertices.size() > 0) {  // transfer data
 	  // transfer the coordinates of the vertices
 		glEnableClientState(GL_VERTEX_ARRAY);
@@ -52,10 +51,10 @@ IndexMesh* IndexMesh::generaAnilloCuadradoIndexado()
 	mesh->mPrimitive = GL_TRIANGLE_STRIP;
 	mesh->mNumVertices = 8;
 	mesh->nNumIndices = 10;
-
-	mesh->vColors.reserve(mesh->mNumVertices);
-	mesh->vIndices = new GLuint[mesh->nNumIndices];
+	GLuint* ind = new GLuint[]{ 0, 1, 2, 3, 4, 5, 6, 7, 0, 1 };
 	mesh->vNormals.reserve(mesh->mNumVertices);
+	mesh->vColors.reserve(mesh->mNumVertices);
+	mesh->vIndices = ind;
 	mesh->vVertices.reserve(mesh->mNumVertices);
 
 	mesh->vColors = { {0.0, 0.0, 0.0, 1.0}, {1.0, 0.0, 0.0, 1.0}, {0.0, 1.0, 0.0, 1.0}, {0.0, 0.0, 1.0, 1.0},
@@ -65,8 +64,7 @@ IndexMesh* IndexMesh::generaAnilloCuadradoIndexado()
 
 	for (int i = 0; i < mesh->mNumVertices; i++)
 		mesh->vNormals.emplace_back((0, 0, 1));
-	unsigned int vIndices[] =
-	{ 0, 1, 2, 3, 4, 5, 6, 7, 0, 1 };
+
 	return mesh;
 }
 
@@ -79,14 +77,14 @@ IndexMesh* IndexMesh::generaCuboConTapasIndexado(GLdouble l)
 	mesh->nNumIndices = 36;
 
 	mesh->vColors.reserve(mesh->mNumVertices);
-	mesh->vIndices = new GLuint[mesh->nNumIndices];
 	mesh->vNormals.reserve(mesh->mNumVertices);
 	mesh->vVertices.reserve(mesh->mNumVertices);
 
 	mesh->vColors = { {0.0, 0.5, 0.0, 1.0}, {0.0, 0.5, 0.0, 1.0}, {0.0, 0.5, 0.0, 1.0}, {0.0, 0.5, 0.0, 1.0},
 		{0.0, 0.5, 0.0, 1.0}, {0.0, 0.5, 0.0, 1.0}, {0.0, 0.5, 0.0, 1.0}, {0.0, 0.5, 0.0, 1.0} };
 	mesh->vVertices = { {l, l, -l}, {l, -l, -l}, {l, l, l}, {l, -l, l}, {-l, l, l}, {-l, -l, l}, {-l, l, -l}, {-l, -l, -l} };
-	//mesh->vIndices = { 0, 1, 2, 2, 1, 3, 2, 3, 4, 4, 3, 5, 4, 5, 6, 6, 5, 7, 6, 7, 0, 0, 7, 1, 4, 6, 2, 2, 6, 0, 1, 7, 3, 3, 7, 5 };
+	mesh->vIndices = new GLuint[] { 0, 1, 2, 2, 1, 3, 2, 3, 4, 4, 3, 5, 4, 5, 6, 6, 5, 7, 6, 7, 0, 0, 7, 1, 4, 6, 2, 2, 6, 0, 1, 7, 3, 3, 7, 5 };
+
 	mesh->BuildNormalVectors();
 	return mesh;
 }
@@ -100,12 +98,22 @@ void IndexMesh::BuildNormalVectors()
 	for (int i = 0; i < mNumVertices; i++)
 	{
 		dvec3 a = vVertices[vIndices[ind]];
-		ind++;
-		dvec3 b = vVertices[vIndices[ind]];
-		ind++;
-		dvec3 c = vVertices[vIndices[ind]];
-		ind++;
+
+		dvec3 b = vVertices[vIndices[ind+1]];
+
+		dvec3 c = vVertices[vIndices[ind+2]];
+
 		dvec3 n = normalize(cross(b - a, c - a));
-		vNormals[i] += n;
+
+		vNormals[vIndices[ind]] += n;
+
+		vNormals[vIndices[ind+1]] += n;
+
+		vNormals[vIndices[ind+2]] += n;
+
+		ind += 3;
 	}
+
+	for (dvec3 v : vNormals)
+		v = normalize(v);
 }

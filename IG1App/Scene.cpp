@@ -96,8 +96,9 @@ void Scene::init()
 		mAux = rotate(mAux, radians(-90.0), dvec3(1.0, 0, 0));
 		cono->setModelMat(mAux);
 		gObjects.push_back(cono);*/
-
-		AnilloCuadrado* anillo = new AnilloCuadrado();
+		//auto* cubo = new Cubo(1);
+		//gObjects.push_back(cubo);
+		auto* anillo = new AnilloCuadrado();
 		gObjects.push_back(anillo);
 
 		/*Disk* disk = new Disk(10.0, 75.0);

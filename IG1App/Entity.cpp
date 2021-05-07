@@ -375,7 +375,9 @@ void AnilloCuadrado::render(dmat4 const& modelViewMat) const
 	{
 		dmat4 aMat = modelViewMat * mModelMat;
 		upload(aMat);
+		glEnable(GL_NORMALIZE);
 		mMesh->render();
+		glDisable(GL_NORMALIZE);
 	}
 }
 
@@ -426,6 +428,7 @@ void CompoundEntity::render(dmat4 const& modelViewMat) const
 	for (Abs_Entity* el : gObjects)
 		el->render(aMat);
 }
+
 TIE::TIE(Texture* noche): CompoundEntity()
 {
 	Cylinder* shaft = new Cylinder(25.0, 25.0, 500.0);

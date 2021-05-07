@@ -59,15 +59,42 @@ void Poligono::render(dmat4 const& modelViewMat) const
 		dmat4 aMat = modelViewMat * mModelMat;  // glm matrix multiplication
 		upload(aMat);
 		glColor3d(mColor.r, mColor.g, mColor.b);
-		mTexture->bind(GL_REPLACE);
 		mMesh->render();
 		/*glLineWidth(1);*/
 		glColor3d(1, 1, 1);
-		mTexture->unbind();
 
 	}
 }
 
+PoligonoConFondo::PoligonoConFondo(GLdouble rd, GLuint numL)
+{
+	mMesh = Mesh::generaPoligonoConFondo(numL, rd);
+}
+
+PoligonoConFondo::~PoligonoConFondo()
+{
+	delete mMesh;
+	mMesh = nullptr;
+}
+
+void PoligonoConFondo::render(dmat4 const& modelViewMat) const
+{
+	if (mMesh != nullptr)
+	{
+		dmat4 aMat = modelViewMat * mModelMat;  // glm matrix multiplication
+		upload(aMat);
+		glDepthMask(GL_FALSE);
+		glEnable(GL_BLEND);
+		glBlendFunc(1, GL_ONE_MINUS_SRC_ALPHA);
+		mTexture->bind(GL_REPLACE);
+		mMesh->render();
+		mTexture->unbind();
+		glDepthMask(GL_TRUE);
+		glDisable(GL_BLEND);
+		/*glLineWidth(1);*/
+
+	}
+}
 Sierpinski::Sierpinski(GLdouble rd, GLuint numP, dvec4 color)
 {
 	mMesh = Mesh::generaSierpinski(numP, rd);
@@ -351,3 +378,84 @@ void AnilloCuadrado::render(dmat4 const& modelViewMat) const
 		mMesh->render();
 	}
 }
+
+Cubo::Cubo(GLdouble l)
+{
+	mMesh = IndexMesh::generaCuboConTapasIndexado(l);
+}
+
+Cubo::~Cubo()
+{
+	delete mMesh;
+	mMesh = nullptr;
+}
+
+void Cubo::render(dmat4 const& modelViewMat) const
+{
+	if (mMesh != nullptr)
+	{
+		dmat4 aMat = modelViewMat * mModelMat;
+		upload(aMat);
+		mMesh->render();
+	}
+}
+
+CompoundEntity::CompoundEntity()
+{
+
+}
+
+CompoundEntity::~CompoundEntity()
+{
+	for (Abs_Entity* el : gObjects)
+	{
+		delete el; el = nullptr;
+	}
+	gObjects.clear();
+}
+
+void CompoundEntity::addEntity(Abs_Entity* ae)
+{
+	gObjects.push_back(ae);
+}
+
+void CompoundEntity::render(dmat4 const& modelViewMat) const
+{
+	dmat4 aMat = modelViewMat * mModelMat;
+	upload(aMat);
+	for (Abs_Entity* el : gObjects)
+		el->render(aMat);
+}
+TIE::TIE(Texture* noche): CompoundEntity()
+{
+	Cylinder* shaft = new Cylinder(25.0, 25.0, 500.0);
+	shaft->setModelMat(translate(shaft->modelMat(), dvec3(0, 0, -250)));
+	this->addEntity(shaft);
+
+	CompoundEntity* front = new CompoundEntity();
+	this->addEntity(front);
+	Cylinder* internCylinder = new Cylinder(100.0, 100.0, 250.0);
+	internCylinder->setModelMat(rotate(internCylinder->modelMat(), radians(90.0), dvec3(0, 1, 0)));
+	internCylinder->setModelMat(translate(internCylinder->modelMat(), dvec3(0, 0, -100)));
+	front->addEntity(internCylinder);
+	Disk* disk = new Disk(0.0, 100.0, 50);
+	disk->setModelMat(rotate(disk->modelMat(), radians(90.0), dvec3(0, 1, 0)));
+	disk->setModelMat(translate(disk->modelMat(), dvec3(0, 0, 150)));
+	front->addEntity(disk);
+
+	Sphere* core = new Sphere(150.0);
+	this->addEntity(core);
+
+	PoligonoConFondo* wingL = new PoligonoConFondo(300, 6);
+	wingL->setTexture(noche);
+	wingL->setModelMat(rotate(wingL->modelMat(), radians(90.0), dvec3(0, 0, 1)));
+	wingL->setModelMat(translate(wingL->modelMat(), dvec3(0, 0, 250)));
+	this->addEntity(wingL);
+
+	PoligonoConFondo* wingR = new PoligonoConFondo(300, 6);
+	wingR->setTexture(noche);
+	wingR->setModelMat(rotate(wingR->modelMat(), radians(90.0), dvec3(0, 0, 1)));
+	wingR->setModelMat(translate(wingR->modelMat(), dvec3(0, 0, -250)));
+	this->addEntity(wingR);
+}
+

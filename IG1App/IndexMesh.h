@@ -13,4 +13,6 @@ public:
 	virtual void render() const;
 	virtual void draw() const;
 	static IndexMesh* generaAnilloCuadradoIndexado();
+	static IndexMesh* generaCuboConTapasIndexado(GLdouble l);
+	void BuildNormalVectors();
 };

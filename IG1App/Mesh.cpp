@@ -97,7 +97,7 @@ Mesh* Mesh::generaPoligonoConFondo(GLuint numL, GLdouble rd)
 {
 	Mesh* mesh = new Mesh();
 
-	mesh->mPrimitive = GL_LINE_LOOP;
+	mesh->mPrimitive = GL_TRIANGLE_FAN;
 
 	mesh->mNumVertices = numL;
 	mesh->vVertices.reserve(mesh->mNumVertices);
@@ -108,11 +108,12 @@ Mesh* Mesh::generaPoligonoConFondo(GLuint numL, GLdouble rd)
 		double y = rd * sin(radians(90.0 + (360.0 / numL) * i));
 		mesh->vVertices.emplace_back(x, y, 0.0);
 	}
-
 	mesh->vTexCoords.reserve(mesh->mNumVertices);
 	for (int i = 0; i < numL; i++)
 	{
-
+		double x = cos(radians(90.0 + (360.0 / numL) * i));
+		double y = sin(radians(90.0 + (360.0 / numL) * i));
+		mesh->vTexCoords.emplace_back(x, y);
 	}
 	return mesh;
 }

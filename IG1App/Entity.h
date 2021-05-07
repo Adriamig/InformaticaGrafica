@@ -64,7 +64,7 @@ public:
 class PoligonoConFondo : public Abs_Entity
 {
 public:
-	explicit PoligonoConFondo(GLdouble rd, GLuint numL, glm::dvec4 color);
+	explicit PoligonoConFondo(GLdouble rd, GLuint numL);
 	~PoligonoConFondo();
 	virtual void render(glm::dmat4 const& modelViewMat) const;
 };
@@ -168,5 +168,31 @@ public:
 	explicit AnilloCuadrado();
 	~AnilloCuadrado();
 	virtual void render(glm::dmat4 const& modelViewMat) const;
+};
+
+class Cubo : public Abs_Entity
+{
+public:
+	explicit Cubo(GLdouble l);
+	~Cubo();
+	virtual void render(glm::dmat4 const& modelViewMat) const;
+};
+
+
+class CompoundEntity : public Abs_Entity
+{
+public:
+	CompoundEntity();
+	virtual ~CompoundEntity();
+	void addEntity(Abs_Entity* ae);
+	virtual void render(glm::dmat4 const& modelViewMat) const;
+protected:
+	std::vector<Abs_Entity*> gObjects;
+};
+
+class TIE : public CompoundEntity
+{
+public:
+	TIE(Texture* noche);
 };
 #endif //_H_Entities_H_

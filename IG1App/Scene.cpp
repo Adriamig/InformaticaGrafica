@@ -94,16 +94,15 @@ void Scene::init()
 	else if (mId == 1)
 	{
 		gObjects.push_back(new EjesRGB(400));
-		
+		auto* anillo = new AnilloCuadrado();
+		gObjects.push_back(anillo);
 		
 	}
 	else if (mId == 2)
 	{
 		gObjects.push_back(new EjesRGB(400));
-		auto* anillo = new AnilloCuadrado();
-		gObjects.push_back(anillo);
-		/*auto* cubo = new Cubo(50);
-		gObjects.push_back(cubo);*/
+		auto* cubo = new Cubo(50);
+		gObjects.push_back(cubo);
 
 	}
 	
@@ -152,7 +151,7 @@ void Scene::resetGL()
 
 void Scene::render(Camera const& cam) const
 {
-	/*if(mId != 1)*/
+	if(mId != 1)
 		sceneDirLight(cam);
 	cam.upload();
 

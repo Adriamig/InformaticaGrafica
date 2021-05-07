@@ -172,7 +172,8 @@ void IG1App::key(unsigned char key, int x, int y)
 	case '1':
 		if (!m2Scenes)
 			mScene->changeScene(1);
-	case 'q':
+		break;
+	case '2':
 		if (!m2Scenes)
 			mScene->changeScene(2);
 		break;

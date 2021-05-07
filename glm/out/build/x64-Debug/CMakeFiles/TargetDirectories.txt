@@ -1,0 +1,4 @@
+C:/hlocal/IG/InformaticaGrafica/glm/out/build/x64-Debug/CMakeFiles/edit_cache.dir
+C:/hlocal/IG/InformaticaGrafica/glm/out/build/x64-Debug/CMakeFiles/glm_static.dir
+C:/hlocal/IG/InformaticaGrafica/glm/out/build/x64-Debug/CMakeFiles/glm_shared.dir
+C:/hlocal/IG/InformaticaGrafica/glm/out/build/x64-Debug/CMakeFiles/rebuild_cache.dir

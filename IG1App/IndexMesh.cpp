@@ -9,10 +9,10 @@ void IndexMesh::render() const
 	if (vVertices.size() > 0) {  // transfer data
 	  // transfer the coordinates of the vertices
 		glEnableClientState(GL_VERTEX_ARRAY);
-		glVertexPointer(3, GL_FLOAT, 0, vVertices.data());  // number of coordinates per vertex, type of each coordinate, stride, pointer 
+		glVertexPointer(3, GL_DOUBLE, 0, vVertices.data());  // number of coordinates per vertex, type of each coordinate, stride, pointer 
 		if (vColors.size() > 0) { // transfer colors
 			glEnableClientState(GL_COLOR_ARRAY);
-			glColorPointer(4, GL_FLOAT, 0, vColors.data());  // components number (rgba=4), type of each component, stride, pointer  
+			glColorPointer(4, GL_DOUBLE, 0, vColors.data());  // components number (rgba=4), type of each component, stride, pointer  
 		}
 		if (vTexCoords.size() > 0) {
 			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -49,21 +49,37 @@ IndexMesh* IndexMesh::generaAnilloCuadradoIndexado()
 	IndexMesh* mesh = new IndexMesh();
 
 	mesh->mPrimitive = GL_TRIANGLE_STRIP;
+
 	mesh->mNumVertices = 8;
 	mesh->nNumIndices = 10;
-	GLuint* ind = new GLuint[]{ 0, 1, 2, 3, 4, 5, 6, 7, 0, 1 };
+
 	mesh->vNormals.reserve(mesh->mNumVertices);
 	mesh->vColors.reserve(mesh->mNumVertices);
-	mesh->vIndices = ind;
+	mesh->vIndices = new GLuint[]{ 0, 1, 2, 3, 4, 5, 6, 7, 0, 1 };
 	mesh->vVertices.reserve(mesh->mNumVertices);
 
-	mesh->vColors = { {0.0, 0.0, 0.0, 1.0}, {1.0, 0.0, 0.0, 1.0}, {0.0, 1.0, 0.0, 1.0}, {0.0, 0.0, 1.0, 1.0},
-		{1.0, 1.0, 0.0, 1.0}, {1.0, 0.0, 1.0, 1.0}, {0.0, 1.0, 1.0, 1.0}, {1.0, 0.0, 0.0, 1.0}};
-	mesh->vVertices = { {30.0, 30.0, 0.0 }, { 10.0, 10.0, 0.0 }, { 70.0, 30.0, 0.0 }, { 90.0, 10.0, 0.0 },
-		{ 70.0, 70.0, 0.0 }, { 90.0, 90.0, 0.0 }, { 30.0, 70.0, 0.0 }, { 10.0, 90.0, 0.0 } };
+	mesh->vColors.emplace_back(0.0, 0.0, 0.0, 1.0);
+	mesh->vColors.emplace_back(1.0, 0.0, 0.0, 1.0);
+	mesh->vColors.emplace_back(0.0, 1.0, 0.0, 1.0);
+	mesh->vColors.emplace_back(0.0, 0.0, 1.0, 1.0);
+	mesh->vColors.emplace_back(1.0, 1.0, 0.0, 1.0);
+	mesh->vColors.emplace_back(1.0, 0.0, 1.0, 1.0);
+	mesh->vColors.emplace_back(0.0, 1.0, 1.0, 1.0);
+	mesh->vColors.emplace_back(1.0, 0.0, 0.0, 1.0);
+
+	mesh->vVertices.emplace_back(30.0, 30.0, 0.0);
+	mesh->vVertices.emplace_back(10.0, 10.0, 0.0);
+	mesh->vVertices.emplace_back(70.0, 30.0, 0.0);
+	mesh->vVertices.emplace_back(90.0, 10.0, 0.0);
+	mesh->vVertices.emplace_back(70.0, 70.0, 0.0);
+	mesh->vVertices.emplace_back(90.0, 90.0, 0.0);
+	mesh->vVertices.emplace_back(30.0, 70.0, 0.0);
+	mesh->vVertices.emplace_back(10.0, 90.0, 0.0);
 
 	for (int i = 0; i < mesh->mNumVertices; i++)
 		mesh->vNormals.emplace_back((0, 0, 1));
+	/*for (int i = 0; i < mesh->nNumIndices; i++)
+		mesh->vIndices[i] = (i % 8);*/
 
 	return mesh;
 }
@@ -72,19 +88,25 @@ IndexMesh* IndexMesh::generaCuboConTapasIndexado(GLdouble l)
 {
 	IndexMesh* mesh = new IndexMesh();
 
-	mesh->mPrimitive = GL_TRIANGLE_STRIP;
+	mesh->mPrimitive = GL_TRIANGLES;
+
 	mesh->mNumVertices = 8;
 	mesh->nNumIndices = 36;
 
 	mesh->vColors.reserve(mesh->mNumVertices);
 	mesh->vNormals.reserve(mesh->mNumVertices);
+	mesh->vIndices = new GLuint[]{ 0, 1, 2, 2, 1, 3, 2, 3, 4, 4, 3, 5, 4, 5, 6, 6, 5, 7, 6, 7, 0, 0, 7, 1, 4, 6, 2, 2, 6, 0, 1, 7, 3, 3, 7, 5 };
 	mesh->vVertices.reserve(mesh->mNumVertices);
 
-	mesh->vColors = { {0.0, 0.5, 0.0, 1.0}, {0.0, 0.5, 0.0, 1.0}, {0.0, 0.5, 0.0, 1.0}, {0.0, 0.5, 0.0, 1.0},
-		{0.0, 0.5, 0.0, 1.0}, {0.0, 0.5, 0.0, 1.0}, {0.0, 0.5, 0.0, 1.0}, {0.0, 0.5, 0.0, 1.0} };
-	mesh->vVertices = { {l, l, -l}, {l, -l, -l}, {l, l, l}, {l, -l, l}, {-l, l, l}, {-l, -l, l}, {-l, l, -l}, {-l, -l, -l} };
-	mesh->vIndices = new GLuint[] { 0, 1, 2, 2, 1, 3, 2, 3, 4, 4, 3, 5, 4, 5, 6, 6, 5, 7, 6, 7, 0, 0, 7, 1, 4, 6, 2, 2, 6, 0, 1, 7, 3, 3, 7, 5 };
-
+	mesh->vVertices.emplace_back(l, l, l);
+	mesh->vVertices.emplace_back(l, -l, l);
+	mesh->vVertices.emplace_back(l, l, -l);
+	mesh->vVertices.emplace_back(l, -l, -l);
+	mesh->vVertices.emplace_back(-l, l, -l);
+	mesh->vVertices.emplace_back(-l, -l, -l);
+	mesh->vVertices.emplace_back(-l, l, l);
+	mesh->vVertices.emplace_back(-l, -l, l);
+	
 	mesh->BuildNormalVectors();
 	return mesh;
 }
@@ -94,8 +116,7 @@ void IndexMesh::BuildNormalVectors()
 	for (int i = 0; i < mNumVertices; i++)
 		vNormals.emplace_back(0, 0, 0);
 
-	int ind = 0;
-	for (int i = 0; i < mNumVertices; i++)
+	for (int ind = 0; ind < nNumIndices; ind+=3)
 	{
 		dvec3 a = vVertices[vIndices[ind]];
 
@@ -103,7 +124,7 @@ void IndexMesh::BuildNormalVectors()
 
 		dvec3 c = vVertices[vIndices[ind+2]];
 
-		dvec3 n = normalize(cross(b - a, c - a));
+		dvec3 n = (cross(b - a, c - a));
 
 		vNormals[vIndices[ind]] += n;
 
@@ -111,7 +132,6 @@ void IndexMesh::BuildNormalVectors()
 
 		vNormals[vIndices[ind+2]] += n;
 
-		ind += 3;
 	}
 
 	for (dvec3 v : vNormals)

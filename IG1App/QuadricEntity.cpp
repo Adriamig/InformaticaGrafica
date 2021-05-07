@@ -70,22 +70,29 @@ void Disk::render(glm::dmat4 const& modelViewMat) const
 	glColor3f(1.0, 1.0, 1.0);
 }
 
-PartialDisk::PartialDisk(GLdouble irr, GLdouble outRR)
+PartialDisk::PartialDisk(GLdouble irr, GLdouble outRR, GLdouble st, GLdouble sw)
 {
 	ir = irr;
 	outR = outRR;
+	stAngle = st;
+	swAngle = sw;
 }
 
 void PartialDisk::render(glm::dmat4 const& modelViewMat) const
 {
 	glm::dmat4 aMat = modelViewMat * mModelMat;
 	upload(aMat);
+	glDepthMask(GL_FALSE);
+	glEnable(GL_BLEND);
+	glBlendFunc(1, GL_ONE_MINUS_SRC_ALPHA);
+	mTexture->bind(GL_REPLACE);
+	//glColor3f(0.0, 0.25, 0.41);
 
-	glEnable(GL_COLOR_MATERIAL);
-	glColor3f(0.0, 0.25, 0.41);
+	gluQuadricTexture(q, GL_TRUE);
+	gluPartialDisk(q, ir, outR, 6, 50, stAngle, swAngle);
 
-	gluQuadricDrawStyle(q, GLU_FILL);
-	//gluPartialDisk(q, ir, outR, 50, 50, );
-
-	glColor3f(1.0, 1.0, 1.0);
+	//glColor3f(1.0, 1.0, 1.0);
+	mTexture->unbind();
+	glDepthMask(GL_TRUE);
+	glDisable(GL_BLEND);
 }

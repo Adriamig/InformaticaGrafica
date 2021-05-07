@@ -375,9 +375,9 @@ void AnilloCuadrado::render(dmat4 const& modelViewMat) const
 	{
 		dmat4 aMat = modelViewMat * mModelMat;
 		upload(aMat);
-		glEnable(GL_NORMALIZE);
+		glEnable(GL_COLOR_MATERIAL);
 		mMesh->render();
-		glDisable(GL_NORMALIZE);
+		glDisable(GL_COLOR_MATERIAL);
 	}
 }
 
@@ -398,7 +398,11 @@ void Cubo::render(dmat4 const& modelViewMat) const
 	{
 		dmat4 aMat = modelViewMat * mModelMat;
 		upload(aMat);
+		glEnable(GL_COLOR_MATERIAL);
+		glColor3f(0.0, 1.0, 0.0);
 		mMesh->render();
+		glDisable(GL_COLOR_MATERIAL);
+		glColor3f(1.0, 1.0, 1.0);
 	}
 }
 
@@ -449,13 +453,13 @@ TIE::TIE(Texture* noche): CompoundEntity()
 	Sphere* core = new Sphere(150.0);
 	this->addEntity(core);
 
-	PoligonoConFondo* wingL = new PoligonoConFondo(300, 6);
+	PartialDisk* wingL = new PartialDisk(0, 300, 360, 360);
 	wingL->setTexture(noche);
 	wingL->setModelMat(rotate(wingL->modelMat(), radians(90.0), dvec3(0, 0, 1)));
 	wingL->setModelMat(translate(wingL->modelMat(), dvec3(0, 0, 250)));
 	this->addEntity(wingL);
 
-	PoligonoConFondo* wingR = new PoligonoConFondo(300, 6);
+	PartialDisk* wingR = new PartialDisk(0, 300, 360, 360);
 	wingR->setTexture(noche);
 	wingR->setModelMat(rotate(wingR->modelMat(), radians(90.0), dvec3(0, 0, 1)));
 	wingR->setModelMat(translate(wingR->modelMat(), dvec3(0, 0, -250)));

@@ -87,28 +87,24 @@ void Scene::init()
 		//glClearColor(0.7, 0.8, 0.9, 0.0);
 		gObjects.push_back(new EjesRGB(400));
 
-		/*Sphere* sphere = new Sphere(100.0);
-		gObjects.push_back(sphere);
-
-		Cylinder* cono = new Cylinder(50.0, 0.0, 100.0);
-		glm::dmat4 mAux = cono->modelMat();
-		mAux = translate(mAux, dvec3(0, 85, 0));
-		mAux = rotate(mAux, radians(-90.0), dvec3(1.0, 0, 0));
-		cono->setModelMat(mAux);
-		gObjects.push_back(cono);*/
-		//auto* cubo = new Cubo(1);
-		//gObjects.push_back(cubo);
-		auto* anillo = new AnilloCuadrado();
-		gObjects.push_back(anillo);
-
-		/*Disk* disk = new Disk(10.0, 75.0);
-		gObjects.push_back(disk);*/
+		TIE* nave = new TIE(n);
+		gObjects.push_back(nave);
+		
 	}
 	else if (mId == 1)
 	{
-		//gObjects.push_back(new EjesRGB(400));
-		TIE* nave = new TIE(n);
-		gObjects.push_back(nave);		
+		gObjects.push_back(new EjesRGB(400));
+		
+		
+	}
+	else if (mId == 2)
+	{
+		gObjects.push_back(new EjesRGB(400));
+		auto* anillo = new AnilloCuadrado();
+		gObjects.push_back(anillo);
+		/*auto* cubo = new Cubo(50);
+		gObjects.push_back(cubo);*/
+
 	}
 	
 
@@ -156,7 +152,8 @@ void Scene::resetGL()
 
 void Scene::render(Camera const& cam) const
 {
-	sceneDirLight(cam);
+	/*if(mId != 1)*/
+		sceneDirLight(cam);
 	cam.upload();
 
 	for (Abs_Entity* el : gObjects)

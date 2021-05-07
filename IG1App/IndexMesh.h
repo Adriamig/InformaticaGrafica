@@ -1,5 +1,7 @@
 #pragma once
-
+#include <GL/freeglut.h>
+#include <glm.hpp>
+#include <vector>
 #include "Mesh.h"
 
 class IndexMesh : public Mesh

@@ -105,7 +105,7 @@ void IG1App::display()
 
 	if (m2Vistas) display2Vistas();
 	else if (m2Scenes) display2Scenes();
-	else  mScene->render(*mCamera);  // uploads the viewport and camera to the GPU
+	mScene->render(*mCamera);  // uploads the viewport and camera to the GPU
 
 	glutSwapBuffers();	// swaps the front and back buffer
 }
@@ -172,6 +172,9 @@ void IG1App::key(unsigned char key, int x, int y)
 	case '1':
 		if (!m2Scenes)
 			mScene->changeScene(1);
+	case 'q':
+		if (!m2Scenes)
+			mScene->changeScene(2);
 		break;
 	case 'm':
 		if (m2Scenes && x < mWinW / 2)

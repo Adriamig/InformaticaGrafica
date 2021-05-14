@@ -107,11 +107,11 @@ IndexMesh* IndexMesh::generaCuboConTapasIndexado(GLdouble l)
 	mesh->vVertices.emplace_back(-l, l, l);
 	mesh->vVertices.emplace_back(-l, -l, l);
 	
-	mesh->BuildNormalVectors();
+	mesh->buildNormalVectors();
 	return mesh;
 }
 
-void IndexMesh::BuildNormalVectors()
+void IndexMesh::buildNormalVectors()
 {
 	for (int i = 0; i < mNumVertices; i++)
 		vNormals.emplace_back(0, 0, 0);
@@ -134,6 +134,68 @@ void IndexMesh::BuildNormalVectors()
 
 	}
 
-	for (dvec3 v : vNormals)
-		v = normalize(v);
+	for (int i = 0; i < vNormals.size(); i++) {
+		vNormals[i] = normalize(vNormals[i]);
+	}
+}
+
+MbR::MbR(GLuint mm, GLuint nn, dvec3* perfill)
+{
+	n = nn;
+	m = mm;
+	perfil = perfill;
+}
+
+MbR* MbR::generaMallaIndexadaPorRevolucion(GLuint mm, GLuint nn, dvec3* perfil)
+{
+	MbR* mesh = new MbR(mm, nn, perfil);
+
+	mesh->mPrimitive = GL_TRIANGLES;
+
+	mesh->mNumVertices = nn * mm;
+	mesh->vVertices.reserve(mesh->mNumVertices);
+	mesh->vIndices = new GLuint[]{ 0, 1, 2, 2, 3, 0 };
+	dvec3* vertices = new dvec3[mesh->mNumVertices];
+	int indice = 0;
+	for (int i = 0; i < nn; i++)
+	{
+		GLdouble theta = i * 360 / nn;
+		GLdouble c = cos(radians(theta));
+		GLdouble s = sin(radians(theta));
+		for (int j = 0; j < mm; j++)
+		{
+			indice = i * mm + j;
+			GLdouble x = c * perfil[j].x + s * perfil[j].z;
+			GLdouble z = -s * perfil[j].x + c * perfil[j].z;
+			vertices[indice] = dvec3(x, perfil[j].y, z);
+		}
+	}
+
+	for (int i = 0; i < mesh->mNumVertices; i++)
+		mesh->vVertices.emplace_back(vertices[i]);
+
+	for (int i = 0; i < nn; i++)
+	{
+		for (int j = 0; j < mm - 1; j++)
+		{
+			indice = i * mm + j;
+		}
+	}
+
+	int indiceMayor = 0;
+	mesh->vIndices[indiceMayor] = indice;
+	indiceMayor++;
+	mesh->vIndices[indiceMayor] = (indice + mm) % (nn * mm);
+	indiceMayor++;
+	mesh->vIndices[indiceMayor] = (indice + mm + 1) % (nn * mm);
+	indiceMayor++;
+	mesh->vIndices[indiceMayor] = (indice + mm + 1) % (nn * mm);
+	indiceMayor++;
+	mesh->vIndices[indiceMayor] = indice + 1;
+	indiceMayor++;
+	mesh->vIndices[indiceMayor] = indice;
+
+
+	mesh->buildNormalVectors();
+	return mesh;
 }

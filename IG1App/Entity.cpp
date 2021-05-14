@@ -406,6 +406,38 @@ void Cubo::render(dmat4 const& modelViewMat) const
 	}
 }
 
+Cone::Cone(GLdouble h, GLdouble r, GLuint n)
+{
+	int m = 3;
+	dvec3* perfil = new dvec3[m];
+	perfil[0] = dvec3(0.5, 0.0, 0.0);
+	perfil[1] = dvec3(r, 0.0, 0.0);
+	perfil[2] = dvec3(0.5, h, 0.0);
+	mMesh = MbR::generaMallaIndexadaPorRevolucion(m, n, perfil); //new MbR(m, n, perfil);
+}
+
+Cone::~Cone()
+{
+	delete mMesh;
+	mMesh = nullptr;
+}
+
+void Cone::render(dmat4 const& modelViewMat) const
+{
+	if (mMesh != nullptr)
+	{
+		dmat4 aMat = modelViewMat * mModelMat;
+		upload(aMat);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glEnable(GL_COLOR_MATERIAL);
+		glColor3f(0.0, 0.0, 1.0);
+		mMesh->render();
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glDisable(GL_COLOR_MATERIAL);
+		glColor3f(1.0, 1.0, 1.0);
+	}
+}
+
 CompoundEntity::CompoundEntity()
 {
 

@@ -103,7 +103,12 @@ void Scene::init()
 		gObjects.push_back(new EjesRGB(400));
 		auto* cubo = new Cubo(50);
 		gObjects.push_back(cubo);
-
+	}
+	else if (mId == 3)
+	{
+		gObjects.push_back(new EjesRGB(400));
+		auto* cone = new Cone(100, 50, 50);
+		gObjects.push_back(cone);
 	}
 	
 

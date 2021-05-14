@@ -177,6 +177,10 @@ void IG1App::key(unsigned char key, int x, int y)
 		if (!m2Scenes)
 			mScene->changeScene(2);
 		break;
+	case '3':
+		if (!m2Scenes)
+			mScene->changeScene(3);
+		break;
 	case 'm':
 		if (m2Scenes && x < mWinW / 2)
 			mCamera2->orbit(1, 1);

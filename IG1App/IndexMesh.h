@@ -16,5 +16,18 @@ public:
 	virtual void draw() const;
 	static IndexMesh* generaAnilloCuadradoIndexado();
 	static IndexMesh* generaCuboConTapasIndexado(GLdouble l);
-	void BuildNormalVectors();
+	void buildNormalVectors();
+};
+
+class MbR : public IndexMesh
+{
+public:
+	MbR(GLuint mm, GLuint nn, glm::dvec3* perfill);
+	~MbR() { delete perfil; };
+	static MbR* generaMallaIndexadaPorRevolucion(GLuint mm, GLuint nn, glm::dvec3* perfil);
+protected:
+	GLuint m; //número de puntos del perfil
+	GLuint n; //número de rotaciones (muestras) que se toman
+	glm::dvec3* perfil; //perfil original en el plano XY
+
 };

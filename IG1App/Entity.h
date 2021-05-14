@@ -195,4 +195,14 @@ class TIE : public CompoundEntity
 public:
 	TIE(Texture* noche);
 };
+
+class Cone : public Abs_Entity
+{
+public:
+	Cone(GLdouble h, GLdouble r, GLuint n);
+	~Cone();
+	virtual void render(glm::dmat4 const& modelViewMat) const;
+};	
+
+
 #endif //_H_Entities_H_

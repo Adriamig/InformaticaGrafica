@@ -438,6 +438,61 @@ void Cone::render(dmat4 const& modelViewMat) const
 	}
 }
 
+Esfera::Esfera(GLdouble r, GLdouble p, GLuint m)
+{
+	dvec3* perfil = new dvec3[m];
+	for (int i = 0; i < m; i++)
+	{
+		double x = r * cos(radians(90.0 + (360.0 / m) * i) / 2);
+		double y = r * sin(radians(90.0 + (360.0 / m) * i) / 2);
+		perfil[i] = dvec3(x, y, 0);
+	}
+	mMesh = MbR::generaMallaIndexadaPorRevolucion(m, p, perfil); //new MbR(m, n, perfil);
+}
+
+Esfera::~Esfera()
+{
+	delete mMesh;
+	mMesh = nullptr;
+}
+
+void Esfera::render(dmat4 const& modelViewMat) const
+{
+	dmat4 aMat = modelViewMat * mModelMat;
+	upload(aMat);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glEnable(GL_COLOR_MATERIAL);
+	glColor3f(0.0, 0.0, 1.0);
+	mMesh->render();
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glDisable(GL_COLOR_MATERIAL);
+	glColor3f(1.0, 1.0, 1.0);
+}
+
+Grid::Grid(GLdouble lado, GLuint nDiv)
+{
+	mMesh = IndexMesh::generateGrid(lado, nDiv);
+
+}
+
+Grid::~Grid()
+{
+	delete mMesh;
+	mMesh = nullptr;
+}
+
+void Grid::render(dmat4 const& modelViewMat) const
+{
+	if (mMesh != nullptr)
+	{
+		dmat4 aMat = modelViewMat * mModelMat;
+		//mTexture->bind(GL_REPLACE);
+		upload(aMat);
+		mMesh->render();
+		//mTexture->unbind();
+	}
+}
+
 CompoundEntity::CompoundEntity()
 {
 

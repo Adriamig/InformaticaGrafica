@@ -111,6 +111,56 @@ IndexMesh* IndexMesh::generaCuboConTapasIndexado(GLdouble l)
 	return mesh;
 }
 
+IndexMesh* IndexMesh::generateGrid(GLdouble lado, GLuint nDiv)
+{
+	IndexMesh* m = new IndexMesh();
+	GLdouble incr = lado / nDiv; // incremento para la coordenada x, y la c. z
+	GLuint numFC = nDiv + 1; // número de vértices por filas y columnas
+
+	m->mNumVertices = numFC * numFC;
+	m->vVertices.reserve(m->mNumVertices);
+	GLdouble z = -lado / 2;
+	GLdouble x = -lado / 2;
+	for (int i = 0; i < numFC; i++)
+	{
+		for (int j = 0; j < numFC; j++)
+			//m->vVertices.emplace_back(dvec3(x + j * incr, 0, z + i * incr));
+			m->vVertices[i * numFC + j] = dvec3(x + j * incr, 0, z + i * incr);
+	}
+
+	m->nNumIndices = nDiv * nDiv * 6;
+	m->vIndices = new GLuint[m->nNumIndices];
+	int k = 0;
+	for (int i = 0; i < nDiv; i++)
+	{
+		for (int j = 0; j < nDiv; j++)
+		{
+			int iv = i * numFC + j;
+			m->vIndices[k++] = iv;
+		}
+	}
+	return m;
+}
+
+IndexMesh* IndexMesh::generateGridTex(GLdouble lado, GLuint nDiv)
+{
+	IndexMesh* m = generateGrid(lado, nDiv);
+	GLuint numFC = nDiv + 1;
+
+	m->vTexCoords.reserve(m->mNumVertices);
+	int s = 0;
+	int t = 1;
+	GLdouble tC = 1 / nDiv;
+	for (int i = 0; i < numFC; i++)
+	{
+		for (int j = 0; j < numFC; j++)
+		{
+			m->vTexCoords[i * numFC + j] = dvec2(s + tC * j, t - tC * i);
+		}
+	}
+	return m;
+}
+
 void IndexMesh::buildNormalVectors()
 {
 	for (int i = 0; i < mNumVertices; i++)

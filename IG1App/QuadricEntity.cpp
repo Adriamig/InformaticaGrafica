@@ -20,7 +20,8 @@ void Sphere::render(glm::dmat4 const& modelViewMat) const
 	upload(aMat);
 
 	glEnable(GL_COLOR_MATERIAL);
-	glColor3f(0.0, 0.25, 0.41);
+	//glColor3f(0.0, 0.25, 0.41);
+    glColor3f(0.0, 0.0, 1.0);
 
 	gluQuadricDrawStyle(q, GLU_FILL);
 	gluSphere(q, r, 50, 50);

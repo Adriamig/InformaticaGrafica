@@ -202,7 +202,23 @@ public:
 	Cone(GLdouble h, GLdouble r, GLuint n);
 	~Cone();
 	virtual void render(glm::dmat4 const& modelViewMat) const;
-};	
+};
+
+class Esfera : public Abs_Entity
+{
+public:
+	Esfera(GLdouble r, GLdouble p, GLuint m);
+	~Esfera();
+	virtual void render(glm::dmat4 const& modelViewMat) const;
+};
+
+class Grid : public Abs_Entity
+{
+public:
+	Grid(GLdouble lado, GLuint nDiv);
+	~Grid();
+	virtual void render(glm::dmat4 const& modelViewMat) const;
+};
 
 
 #endif //_H_Entities_H_

@@ -81,6 +81,9 @@ void Scene::init()
 	Texture* n = new Texture();
 	n->load("..\\Bmps\\noche.bmp", 100);
 	gTextures.push_back(n);
+	Texture* bC = new Texture();
+	bC->load("..\\Bmps\\baldosaC.bmp");
+	gTextures.push_back(bC);
 
 	if (mId == 0)
 	{
@@ -107,8 +110,27 @@ void Scene::init()
 	else if (mId == 3)
 	{
 		gObjects.push_back(new EjesRGB(400));
-		auto* cone = new Cone(100, 50, 50);
-		gObjects.push_back(cone);
+		/*auto* cone = new Cone(100, 50, 50);
+		gObjects.push_back(cone);*/
+		/*auto* esfera = new Esfera(200, 15, 9);
+		gObjects.push_back(esfera);*/
+	}
+	else if (mId == 4)
+	{
+		gObjects.push_back(new EjesRGB(400));
+		Esfera* sphere1 = new Esfera(100, 50, 50);
+		sphere1->setModelMat(translate(sphere1->modelMat(), dvec3(0, 0, 250)));
+		gObjects.push_back(sphere1);
+		Sphere* sphere2 = new Sphere(100);
+		sphere2->setModelMat(translate(sphere2->modelMat(), dvec3(250, 0, 0)));
+		gObjects.push_back(sphere2);
+	}
+	else if (mId == 5)
+	{
+		gObjects.push_back(new EjesRGB(400));
+		auto* grid = new Grid(200, 10);
+		//grid->setTexture(bC);
+		gObjects.push_back(grid);
 	}
 	
 

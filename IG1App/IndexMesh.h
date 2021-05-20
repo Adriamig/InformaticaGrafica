@@ -11,7 +11,7 @@ protected:
 	GLuint nNumIndices = 0;
 public:
 	IndexMesh() { mPrimitive = GL_TRIANGLES; }
-	~IndexMesh() { delete[] vIndices; }
+	virtual ~IndexMesh();
 	virtual void render() const;
 	virtual void draw() const;
 	static IndexMesh* generaAnilloCuadradoIndexado();
@@ -25,7 +25,7 @@ class MbR : public IndexMesh
 {
 public:
 	MbR(GLuint mm, GLuint nn, glm::dvec3* perfill);
-	~MbR() { delete perfil; };
+	~MbR();
 	static MbR* generaMallaIndexadaPorRevolucion(GLuint mm, GLuint nn, glm::dvec3* perfil);
 protected:
 	GLuint m; //número de puntos del perfil

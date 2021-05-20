@@ -220,5 +220,8 @@ public:
 	virtual void render(glm::dmat4 const& modelViewMat) const;
 };
 
-
+class GridCube : public CompoundEntity {
+public:
+	GridCube(Texture* stones, Texture* checker);
+};
 #endif //_H_Entities_H_

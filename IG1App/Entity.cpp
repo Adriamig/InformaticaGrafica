@@ -398,6 +398,7 @@ void Cubo::render(dmat4 const& modelViewMat) const
 	{
 		dmat4 aMat = modelViewMat * mModelMat;
 		upload(aMat);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glEnable(GL_COLOR_MATERIAL);
 		glColor3f(0.0, 1.0, 0.0);
 		mMesh->render();
@@ -440,11 +441,11 @@ void Cone::render(dmat4 const& modelViewMat) const
 
 Esfera::Esfera(GLdouble r, GLdouble p, GLuint m)
 {
-	dvec3* perfil = new dvec3[m];
-	for (int i = 0; i < m; i++)
+	dvec3* perfil = new dvec3[m + 1];
+	for (int i = 0; i <= m; i++)
 	{
-		double x = r * cos(radians(90.0 + (360.0 / m) * i) / 2);
-		double y = r * sin(radians(90.0 + (360.0 / m) * i) / 2);
+		double x = r * cos(radians(90.0 + (180.0 / m) * i));
+		double y = r * sin(radians(90.0 + (180.0 / m) * i));
 		perfil[i] = dvec3(x, y, 0);
 	}
 	mMesh = MbR::generaMallaIndexadaPorRevolucion(m, p, perfil); //new MbR(m, n, perfil);
@@ -471,8 +472,7 @@ void Esfera::render(dmat4 const& modelViewMat) const
 
 Grid::Grid(GLdouble lado, GLuint nDiv)
 {
-	mMesh = IndexMesh::generateGrid(lado, nDiv);
-
+	mMesh = IndexMesh::generateGridTex(lado, nDiv);
 }
 
 Grid::~Grid()
@@ -486,10 +486,16 @@ void Grid::render(dmat4 const& modelViewMat) const
 	if (mMesh != nullptr)
 	{
 		dmat4 aMat = modelViewMat * mModelMat;
-		//mTexture->bind(GL_REPLACE);
+		glPolygonMode(GL_BACK, GL_LINE);
+		//glEnable(GL_COLOR_MATERIAL);
+		//glColor3f(0.0, 0.0, 1.0);
+		mTexture->bind(GL_REPLACE);
 		upload(aMat);
 		mMesh->render();
-		//mTexture->unbind();
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		//glDisable(GL_COLOR_MATERIAL);
+		//glColor3f(1.0, 1.0, 1.0);
+		mTexture->unbind();
 	}
 }
 
@@ -520,14 +526,14 @@ void CompoundEntity::render(dmat4 const& modelViewMat) const
 		el->render(aMat);
 }
 
-TIE::TIE(Texture* noche): CompoundEntity()
+TIE::TIE(Texture* noche) : CompoundEntity()
 {
 	Cylinder* shaft = new Cylinder(25.0, 25.0, 500.0);
 	shaft->setModelMat(translate(shaft->modelMat(), dvec3(0, 0, -250)));
-	this->addEntity(shaft);
+	addEntity(shaft);
 
 	CompoundEntity* front = new CompoundEntity();
-	this->addEntity(front);
+	addEntity(front);
 	Cylinder* internCylinder = new Cylinder(100.0, 100.0, 250.0);
 	internCylinder->setModelMat(rotate(internCylinder->modelMat(), radians(90.0), dvec3(0, 1, 0)));
 	internCylinder->setModelMat(translate(internCylinder->modelMat(), dvec3(0, 0, -100)));
@@ -538,18 +544,53 @@ TIE::TIE(Texture* noche): CompoundEntity()
 	front->addEntity(disk);
 
 	Sphere* core = new Sphere(150.0);
-	this->addEntity(core);
+	addEntity(core);
 
 	PartialDisk* wingL = new PartialDisk(0, 300, 360, 360);
 	wingL->setTexture(noche);
 	wingL->setModelMat(rotate(wingL->modelMat(), radians(90.0), dvec3(0, 0, 1)));
 	wingL->setModelMat(translate(wingL->modelMat(), dvec3(0, 0, 250)));
-	this->addEntity(wingL);
+	addEntity(wingL);
 
 	PartialDisk* wingR = new PartialDisk(0, 300, 360, 360);
 	wingR->setTexture(noche);
 	wingR->setModelMat(rotate(wingR->modelMat(), radians(90.0), dvec3(0, 0, 1)));
 	wingR->setModelMat(translate(wingR->modelMat(), dvec3(0, 0, -250)));
-	this->addEntity(wingR);
+	addEntity(wingR);
 }
 
+GridCube::GridCube(Texture* stones, Texture* checker) {
+	auto* top = new Grid(200, 10);
+	top->setTexture(checker);
+	top->setModelMat(translate(top->modelMat(), dvec3(0, 100, 0)));
+	top->setModelMat(rotate(top->modelMat(), radians(90.0), dvec3(0, 1, 0)));
+	addEntity(top);
+	auto* xPos = new Grid(200, 10);
+	xPos->setTexture(stones);
+	xPos->setModelMat(translate(xPos->modelMat(), dvec3(100, 0, 0)));
+	xPos->setModelMat(rotate(xPos->modelMat(), radians(-90.0), dvec3(0, 0, 1)));
+	addEntity(xPos);
+	auto* xNeg = new Grid(200, 10);
+	xNeg->setTexture(stones);
+	xNeg->setModelMat(translate(xNeg->modelMat(), dvec3(-100, 0, 0)));
+	xNeg->setModelMat(rotate(xNeg->modelMat(), radians(180.0), dvec3(1, 0, 0)));
+	xNeg->setModelMat(rotate(xNeg->modelMat(), radians(90.0), dvec3(0, 0, 1)));
+	addEntity(xNeg);
+	auto* zPos = new Grid(200, 10);
+	zPos->setTexture(stones);
+	zPos->setModelMat(translate(zPos->modelMat(), dvec3(0, 0, 100)));
+	zPos->setModelMat(rotate(zPos->modelMat(), radians(-90.0), dvec3(0, 0, 1)));
+	zPos->setModelMat(rotate(zPos->modelMat(), radians(90.0), dvec3(1, 0, 0)));
+	addEntity(zPos);
+	auto* zNeg = new Grid(200, 10);
+	zNeg->setTexture(stones);
+	zNeg->setModelMat(translate(zNeg->modelMat(), dvec3(0, 0, -100)));
+	zNeg->setModelMat(rotate(zNeg->modelMat(), radians(-90.0), dvec3(0, 0, 1)));
+	zNeg->setModelMat(rotate(zNeg->modelMat(), radians(-90.0), dvec3(1, 0, 0)));
+	addEntity(zNeg);
+	auto* bottom = new Grid(200, 10);
+	bottom->setTexture(checker);
+	bottom->setModelMat(translate(bottom->modelMat(), dvec3(0, -100, 0)));
+	bottom->setModelMat(rotate(bottom->modelMat(), radians(180.0), dvec3(0, 0, 1)));
+	addEntity(bottom);
+}

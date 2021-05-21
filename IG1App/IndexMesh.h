@@ -24,12 +24,12 @@ public:
 class MbR : public IndexMesh
 {
 public:
-	MbR(GLuint mm, GLuint nn, glm::dvec3* perfill);
-	~MbR();
-	static MbR* generaMallaIndexadaPorRevolucion(GLuint mm, GLuint nn, glm::dvec3* perfil);
+	MbR(int mm, int nn, glm::dvec3* perfill);
+	~MbR() { delete perfil; perfil = nullptr; };
+	static MbR* generaMallaIndexadaPorRevolucion(int mm, int nn, glm::dvec3* perfil);
 protected:
-	GLuint m; //número de puntos del perfil
-	GLuint n; //número de rotaciones (muestras) que se toman
+	int m; //número de puntos del perfil
+	int n; //número de rotaciones (muestras) que se toman
 	glm::dvec3* perfil; //perfil original en el plano XY
 
 };

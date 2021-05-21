@@ -115,17 +115,17 @@ void Scene::init()
 		gObjects.push_back(new EjesRGB(400));
 		auto* cone = new Cone(100, 50, 50);
 		gObjects.push_back(cone);
-		auto* esfera = new Esfera(200, 15, 9);
-		gObjects.push_back(esfera);
 	}
 	else if (mId == 4)
 	{
 		gObjects.push_back(new EjesRGB(400));
 		Esfera* sphere1 = new Esfera(100, 50, 50);
 		sphere1->setModelMat(translate(sphere1->modelMat(), dvec3(0, 0, 250)));
+		//sphere1->setModelMat(rotate(sphere1->modelMat(), radians(180.0), dvec3(0, 0, 1)));
 		gObjects.push_back(sphere1);
 		Sphere* sphere2 = new Sphere(100);
 		sphere2->setModelMat(translate(sphere2->modelMat(), dvec3(250, 0, 0)));
+
 		gObjects.push_back(sphere2);
 	}
 	else if (mId == 5)

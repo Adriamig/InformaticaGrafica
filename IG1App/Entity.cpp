@@ -414,13 +414,7 @@ Cone::Cone(GLdouble h, GLdouble r, GLuint n)
 	perfil[0] = dvec3(0.5, 0.0, 0.0);
 	perfil[1] = dvec3(r, 0.0, 0.0);
 	perfil[2] = dvec3(0.5, h, 0.0);
-	mMesh = MbR::generaMallaIndexadaPorRevolucion(m, n, perfil); //new MbR(m, n, perfil);
-}
-
-Cone::~Cone()
-{
-	delete mMesh;
-	mMesh = nullptr;
+	this->mMesh = MbR::generaMallaIndexadaPorRevolucion(m, n, perfil); //new MbR(m, n, perfil);
 }
 
 void Cone::render(dmat4 const& modelViewMat) const
@@ -442,13 +436,14 @@ void Cone::render(dmat4 const& modelViewMat) const
 Esfera::Esfera(GLdouble r, GLdouble p, GLuint m)
 {
 	dvec3* perfil = new dvec3[m + 1];
-	for (int i = 0; i <= m; i++)
+	for (int i = 0; i < m - 1; i++)
 	{
-		double x = r * cos(radians(90.0 + (180.0 / m) * i));
-		double y = r * sin(radians(90.0 + (180.0 / m) * i));
+		double x = r * cos(radians(-90.0 + (180.0 / m) * i));
+		double y = r * sin(radians(-90.0 + (180.0 / m) * i));
 		perfil[i] = dvec3(x, y, 0);
 	}
-	mMesh = MbR::generaMallaIndexadaPorRevolucion(m, p, perfil); //new MbR(m, n, perfil);
+	perfil[m - 1] = dvec3(0, r, 0);
+	this->mMesh = MbR::generaMallaIndexadaPorRevolucion(m, p, perfil); //new MbR(m, n, perfil);
 }
 
 Esfera::~Esfera()
@@ -459,15 +454,19 @@ Esfera::~Esfera()
 
 void Esfera::render(dmat4 const& modelViewMat) const
 {
-	dmat4 aMat = modelViewMat * mModelMat;
-	upload(aMat);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	glEnable(GL_COLOR_MATERIAL);
-	glColor3f(0.0, 0.0, 1.0);
-	mMesh->render();
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	glDisable(GL_COLOR_MATERIAL);
-	glColor3f(1.0, 1.0, 1.0);
+	if (mMesh != nullptr)
+	{
+		dmat4 aMat = modelViewMat * mModelMat;
+		upload(aMat);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glEnable(GL_COLOR_MATERIAL);
+		glColor3f(0.0, 0.0, 1.0);
+		mMesh->render();
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glDisable(GL_COLOR_MATERIAL);
+		glColor3f(1.0, 1.0, 1.0);
+	}
+	
 }
 
 Grid::Grid(GLdouble lado, GLuint nDiv)

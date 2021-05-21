@@ -129,7 +129,6 @@ IndexMesh* IndexMesh::generateGrid(GLdouble lado, GLuint nDiv)
 	{
 		for (int j = 0; j < numFC; j++)
 			m->vVertices.emplace_back(dvec3(x + j * incr, 0, z + i * incr));
-		//m->vVertices[i * numFC + j] = dvec3(x + j * incr, 0, z + i * incr);
 	}
 
 	m->nNumIndices = nDiv * nDiv * 6;
@@ -205,28 +204,26 @@ void IndexMesh::buildNormalVectors()
 	}
 }
 
-MbR::MbR(GLuint mm, GLuint nn, dvec3* perfill)
+MbR::MbR(int mm, int nn, dvec3* perfill)
 {
 	n = nn;
 	m = mm;
 	perfil = perfill;
 }
 
-MbR::~MbR() {
-	delete[] perfil; 
-}
-
-MbR* MbR::generaMallaIndexadaPorRevolucion(GLuint mm, GLuint nn, dvec3* perfil)
+MbR* MbR::generaMallaIndexadaPorRevolucion(int mm, int nn, dvec3* perfil)
 {
 	MbR* mesh = new MbR(mm, nn, perfil);
 
 	mesh->mPrimitive = GL_TRIANGLES;
 
 	mesh->mNumVertices = nn * mm;
-	mesh->vVertices.reserve(mesh->mNumVertices);
-	mesh->vIndices = new GLuint[nn * (mm - 1) * 6];
+	mesh->nNumIndices = 6 * nn * mm - 6 * nn;
+	dvec3* vertices = new dvec3[mesh->mNumVertices];
+	mesh->vIndices = new GLuint[mesh->nNumIndices];
+	mesh->vNormals.reserve(mesh->mNumVertices);
 
-	int indice = 0;
+	int indiceMayor = 0;
 	for (int i = 0; i < nn; i++)
 	{
 		GLdouble theta = i * 360.0 / nn;
@@ -234,35 +231,34 @@ MbR* MbR::generaMallaIndexadaPorRevolucion(GLuint mm, GLuint nn, dvec3* perfil)
 		GLdouble s = sin(radians(theta));
 		for (int j = 0; j < mm; j++)
 		{
-			indice = i * mm + j;
+			int indice = i * mm + j;
 			GLdouble x = c * perfil[j].x + s * perfil[j].z;
 			GLdouble z = -s * perfil[j].x + c * perfil[j].z;
-			mesh->vVertices.emplace_back(x, perfil[j].y, z);
+			vertices[indice] = dvec3(x, perfil[j].y, z);
 		}
 	}
+	for (int i = 0; i < mesh->mNumVertices; i++)
+		mesh->vVertices.emplace_back(vertices[i]);
 
-	indice = 0;
-	int indiceMayor = 0;
 	for (int i = 0; i < nn; i++)
 	{
 		for (int j = 0; j < mm - 1; j++)
 		{
-			indice = i * mm + j;
+			int indice = i * mm + j;
 			mesh->vIndices[indiceMayor] = indice;
 			indiceMayor++;
 			mesh->vIndices[indiceMayor] = (indice + mm) % (nn * mm);
 			indiceMayor++;
 			mesh->vIndices[indiceMayor] = (indice + mm + 1) % (nn * mm);
 			indiceMayor++;
-			mesh->vIndices[indiceMayor] = indice;
-			indiceMayor++;
 			mesh->vIndices[indiceMayor] = (indice + mm + 1) % (nn * mm);
 			indiceMayor++;
 			mesh->vIndices[indiceMayor] = indice + 1;
 			indiceMayor++;
+			mesh->vIndices[indiceMayor] = indice;
+			indiceMayor++;
 		}
 	}
-
 	mesh->buildNormalVectors();
 	return mesh;
 }

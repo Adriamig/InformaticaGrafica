@@ -37,6 +37,8 @@ public:
 
 	void changeScene(int id);
 
+	void setTIEsLights(bool active);
+
 	//void sceneDirLight(Camera const& cam) const;
 
 protected:
@@ -47,6 +49,10 @@ protected:
 
 	int mId = 0;
 	static bool initGL;
+
+	SpotLight* naveFoco1 = nullptr;
+	SpotLight* naveFoco2 = nullptr;
+	SpotLight* naveFoco3 = nullptr;
 
 	std::vector<Abs_Entity*> gObjects;  // Entities (graphic objects) of the scene
 	std::vector<Texture*> gTextures;

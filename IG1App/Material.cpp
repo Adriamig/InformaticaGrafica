@@ -10,9 +10,17 @@ void Material::upload() {
 	glShadeModel(sh);
 	//glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE); // Defecto
 }
+
 void Material::setCopper() {
-	ambient = { 0.19125, 0.0735, 0.0225, 1 };
-	diffuse = { 0.7038, 0.27048, 0.0828, 1 };
-	specular = { 0.256777, 0.137622, 0.086014, 1 };
+	ambient = { 0.19125, 0.0735, 0.0225, 1.0 };
+	diffuse = { 0.7038, 0.27048, 0.0828, 1.0 };
+	specular = { 0.256777, 0.137622, 0.086014, 1.0 };
 	expF = 12.8;
+}
+
+void Material::setBrass() {
+	ambient = glm::fvec4(0.329412, 0.223529, 0.027451, 1.0);
+	diffuse = glm::fvec4(0.780392, 0.568627, 0.113725, 1.0);
+	specular = glm::fvec4(0.992157, 0.941176, 0.807843, 1.0);
+	expF = 27.8974;
 }

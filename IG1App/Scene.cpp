@@ -90,12 +90,14 @@ void Scene::init()
 	checker->load("..\\Bmps\\checker.bmp");
 	gTextures.push_back(checker);
 
+	setTIEsLights(false);
+
 	if (mId == 0)
 	{
 		//glClearColor(0.7, 0.8, 0.9, 0.0);
 		gObjects.push_back(new EjesRGB(400));
 
-		TIE* nave = new TIE(n);
+		TIE* nave = new TIE(n, naveFoco1);
 		gObjects.push_back(nave);
 
 	}
@@ -141,32 +143,17 @@ void Scene::init()
 	else if (mId == 6) {
 		gObjects.push_back(new EjesRGB(400));
 
-		Esfera* esfera = new Esfera(250, 150, 150);
+
+		Material* laton = new Material();
+		laton->setCopper();
+
+		Esfera* esfera = new Esfera(250, 500, 500);
 		esfera->setColor({ 0.0, 1.0, 1.0, 1.0 });
+		//esfera->setMaterial(laton);
 		gObjects.push_back(esfera);
 
-		Flota* naves = new Flota(n);
+		Flota* naves = new Flota(n, naveFoco1, naveFoco2, naveFoco3);
 		gObjects.push_back(naves);
-
-		// Tiene que ser compund entity los 3
-		//TIE* nave = new TIE(n);
-		//nave->setModelMat(translate(nave->modelMat(), dvec3(0, 300, 0)));
-		//nave->setModelMat(scale(nave->modelMat(), dvec3(0.5, 0.5, 0.5)));
-		//gObjects.push_back(nave);
-
-		//TIE* nave2 = new TIE(n);
-		//nave2->setModelMat(rotate(nave2->modelMat(), radians(10.0), dvec3(1, 0, 0)));
-		//nave2->setModelMat(rotate(nave2->modelMat(), radians(5.0), dvec3(0, 0, 1)));
-		//nave2->setModelMat(translate(nave2->modelMat(), dvec3(0, 300, 0)));
-		//nave2->setModelMat(scale(nave2->modelMat(), dvec3(0.5, 0.5, 0.5)));
-		//gObjects.push_back(nave2);
-
-		//TIE* nave3 = new TIE(n);
-		//nave3->setModelMat(rotate(nave3->modelMat(), radians(-10.0), dvec3(1, 0, 0)));
-		//nave3->setModelMat(rotate(nave3->modelMat(), radians(5.0), dvec3(0, 0, 1)));
-		//nave3->setModelMat(translate(nave3->modelMat(), dvec3(0, 300, 0)));
-		//nave3->setModelMat(scale(nave3->modelMat(), dvec3(0.5, 0.5, 0.5)));
-		//gObjects.push_back(nave3);
 	}
 
 
@@ -177,6 +164,20 @@ void Scene::changeScene(int id) {
 	mId = id;
 	free();
 	init();
+}
+
+void Scene::setTIEsLights(bool active)
+{
+	if (active && mId == 6) {
+		naveFoco1->enable();
+		naveFoco2->enable();
+		naveFoco3->enable();
+	}
+	else if (mId == 6) {
+		naveFoco1->disable();
+		naveFoco2->disable();
+		naveFoco3->disable();
+	}
 }
 
 //-------------------------------------------------------------------------
@@ -232,6 +233,26 @@ void Scene::setLights() {
 	spotLight->setDiff(fvec4(1, 1, 1, 1));
 	spotLight->setSpec(fvec4(0.5, 0.5, 0.5, 1));
 
+	naveFoco1 = new SpotLight(fvec3(0, 0, 0));
+	naveFoco1->disable();
+	naveFoco1->setSpot(fvec3(0, -1, 0), 20, 50);
+	naveFoco1->setAmb(fvec4(0, 0, 0, 1));
+	naveFoco1->setDiff(fvec4(1, 1, 1, 1));
+	naveFoco1->setSpec(fvec4(0.5, 0.5, 0.5, 1));
+
+	naveFoco2 = new SpotLight(fvec3(0, 0, 0));
+	naveFoco2->disable();
+	naveFoco2->setSpot(fvec3(0, -1, 0), 20, 50);
+	naveFoco2->setAmb(fvec4(0, 0, 0, 1));
+	naveFoco2->setDiff(fvec4(1, 1, 1, 1));
+	naveFoco2->setSpec(fvec4(0.5, 0.5, 0.5, 1));
+
+	naveFoco3 = new SpotLight(fvec3(0, 0, 0));
+	naveFoco3->disable();
+	naveFoco3->setSpot(fvec3(0, -1, 0), 20, 50);
+	naveFoco3->setAmb(fvec4(0, 0, 0, 1));
+	naveFoco3->setDiff(fvec4(1, 1, 1, 1));
+	naveFoco3->setSpec(fvec4(0.5, 0.5, 0.5, 1));
 }
 
 //-------------------------------------------------------------------------
@@ -250,6 +271,7 @@ void Scene::render(Camera const& cam) const
 	dirLight->upload(cam.viewMat());
 	posLight->upload(cam.viewMat());
 	spotLight->upload(cam.viewMat());
+
 	cam.upload();
 
 	for (Abs_Entity* el : gObjects)

@@ -9,6 +9,7 @@
 #include "Texture.h"
 #include "IndexMesh.h"
 #include "Material.h"
+#include "Light.h"
 
 //-------------------------------------------------------------------------
 
@@ -209,7 +210,10 @@ protected:
 class TIE : public CompoundEntity
 {
 public:
-	TIE(Texture* noche);
+	SpotLight* foco;
+
+	TIE(Texture* noche, SpotLight* foco);
+	virtual void render(glm::dmat4 const& modelViewMat) const;
 };
 
 class GridCube : public CompoundEntity {
@@ -219,7 +223,7 @@ public:
 
 class Flota : public CompoundEntity {
 public:
-	Flota(Texture* noche);
+	Flota(Texture* noche, SpotLight* f1, SpotLight* f2, SpotLight* f3);
 };
 
 class EntityWithMaterial : public Abs_Entity {

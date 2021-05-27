@@ -209,7 +209,7 @@ void IG1App::key(unsigned char key, int x, int y)
 		if (m2Scenes) m2Scenes = false;
 		m2Vistas = !m2Vistas;
 		break;
-	case 't':
+	case 'y':
 		if (m2Vistas) m2Vistas = false;
 		m2Scenes = !m2Scenes;
 		mScene->changeScene(0);
@@ -268,6 +268,22 @@ void IG1App::key(unsigned char key, int x, int y)
 		else {
 			GLfloat amb[] = { 0.2, 0.2, 0.2, 1.0 };
 			mScene->setLightModel(amb);
+		}
+		break;
+	case 't':
+		if (m2Scenes && x < mWinW / 2) {
+			mScene2->setTIEsLights(true);
+		}
+		else {
+			mScene->setTIEsLights(true);
+		}
+		break;
+	case 'g':
+		if (m2Scenes && x < mWinW / 2) {
+			mScene2->setTIEsLights(false);
+		}
+		else {
+			mScene->setTIEsLights(false);
 		}
 		break;
 	default:

@@ -448,7 +448,7 @@ Esfera::Esfera(GLdouble r, GLdouble p, GLuint m)
 
 Esfera::~Esfera()
 {
-	delete mMesh;
+	delete mMesh; delete material;
 	mMesh = nullptr;
 }
 
@@ -525,8 +525,10 @@ void CompoundEntity::render(dmat4 const& modelViewMat) const
 		el->render(aMat);
 }
 
-TIE::TIE(Texture* noche) : CompoundEntity()
+TIE::TIE(Texture* noche, SpotLight* f) : CompoundEntity()
 {
+	foco = f;
+
 	Cylinder* shaft = new Cylinder(25.0, 25.0, 500.0);
 	shaft->setModelMat(translate(shaft->modelMat(), dvec3(0, 0, -250)));
 	addEntity(shaft);
@@ -556,6 +558,16 @@ TIE::TIE(Texture* noche) : CompoundEntity()
 	wingR->setModelMat(rotate(wingR->modelMat(), radians(90.0), dvec3(0, 0, 1)));
 	wingR->setModelMat(translate(wingR->modelMat(), dvec3(0, 0, -250)));
 	addEntity(wingR);
+}
+
+void TIE::render(glm::dmat4 const& modelViewMat) const {
+	dmat4 aMat = modelViewMat * mModelMat;
+	upload(aMat);
+
+	foco->upload(aMat);
+
+	for (Abs_Entity* el : gObjects)
+		el->render(aMat);
 }
 
 GridCube::GridCube(Texture* stones, Texture* checker) {
@@ -594,21 +606,21 @@ GridCube::GridCube(Texture* stones, Texture* checker) {
 	addEntity(bottom);
 }
 
-Flota::Flota(Texture* noche) {
+Flota::Flota(Texture* noche, SpotLight* f1, SpotLight* f2, SpotLight* f3) {
 	// Tiene que ser compund entity los 3
-	TIE* nave = new TIE(noche);
+	auto* nave = new TIE(noche, f1);
 	nave->setModelMat(translate(nave->modelMat(), dvec3(0, 300, 0)));
 	nave->setModelMat(scale(nave->modelMat(), dvec3(0.1, 0.1, 0.1)));
 	addEntity(nave);
 
-	TIE* nave2 = new TIE(noche);
+	auto* nave2 = new TIE(noche, f2);
 	nave2->setModelMat(rotate(nave2->modelMat(), radians(15.0), dvec3(1, 0, 0)));
 	nave2->setModelMat(rotate(nave2->modelMat(), radians(5.0), dvec3(0, 0, 1)));
 	nave2->setModelMat(translate(nave2->modelMat(), dvec3(0, 300, 0)));
 	nave2->setModelMat(scale(nave2->modelMat(), dvec3(0.1, 0.1, 0.1)));
 	addEntity(nave2);
 
-	TIE* nave3 = new TIE(noche);
+	auto* nave3 = new TIE(noche, f3);
 	nave3->setModelMat(rotate(nave3->modelMat(), radians(-15.0), dvec3(1, 0, 0)));
 	nave3->setModelMat(rotate(nave3->modelMat(), radians(5.0), dvec3(0, 0, 1)));
 	nave3->setModelMat(translate(nave3->modelMat(), dvec3(0, 300, 0)));

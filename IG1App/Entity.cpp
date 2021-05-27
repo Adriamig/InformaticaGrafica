@@ -563,9 +563,9 @@ TIE::TIE(Texture* noche, SpotLight* f) : CompoundEntity()
 
 void TIE::render(glm::dmat4 const& modelViewMat) const {
 	dmat4 aMat = modelViewMat * mModelMat;
+	foco->upload(aMat);
 	upload(aMat);
 
-	foco->upload(aMat);
 
 	for (Abs_Entity* el : gObjects)
 		el->render(aMat);
@@ -632,14 +632,5 @@ Flota::Flota(Texture* noche, SpotLight* f1, SpotLight* f2, SpotLight* f3) {
 void Flota::update()
 {
 	mModelMat = rotate(mModelMat, radians(ang2), dvec3(0, 1, 0));
-	mModelMat = rotate(mModelMat, radians(ang), dvec3(0, 0, 1));
-}
-void Flota::rota()
-{
-	mModelMat = rotate(mModelMat, radians(ang2), dvec3(0, 1, 0));
-}
-
-void Flota::orbita()
-{
 	mModelMat = rotate(mModelMat, radians(ang), dvec3(0, 0, 1));
 }

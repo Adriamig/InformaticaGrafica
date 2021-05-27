@@ -224,6 +224,12 @@ public:
 class Flota : public CompoundEntity {
 public:
 	Flota(Texture* noche, SpotLight* f1, SpotLight* f2, SpotLight* f3);
+	virtual void update();
+	void orbita();
+	void rota();
+protected:
+	GLdouble ang = 0.2;
+	GLdouble ang2 = 0.5;
 };
 
 class EntityWithMaterial : public Abs_Entity {

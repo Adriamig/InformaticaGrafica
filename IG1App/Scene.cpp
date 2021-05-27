@@ -7,6 +7,13 @@ using namespace glm;
 //-------------------------------------------------------------------------
 
 bool Scene::initGL = false;
+DirLight* Scene::dirLight = new DirLight();
+PosLight* Scene::posLight = new PosLight();
+SpotLight* Scene::spotLight = new SpotLight(fvec3(0, 0, 300));
+SpotLight* Scene::naveFoco1 = new SpotLight(fvec3(0, 0, 0));
+SpotLight* Scene::naveFoco2 = new SpotLight(fvec3(0, 0, 0));
+SpotLight* Scene::naveFoco3 = new SpotLight(fvec3(0, 0, 0));
+
 
 void Scene::init()
 {
@@ -78,7 +85,8 @@ void Scene::init()
 
 	//Práctica 2
 	if (!initGL) setGL();  // OpenGL settings
-
+	else
+		setTIEsLights(false);
 	// Textures
 	Texture* n = new Texture();
 	n->load("..\\Bmps\\noche.bmp", 100);
@@ -90,7 +98,6 @@ void Scene::init()
 	checker->load("..\\Bmps\\checker.bmp");
 	gTextures.push_back(checker);
 
-	setTIEsLights(false);
 
 	if (mId == 0)
 	{
@@ -149,14 +156,14 @@ void Scene::init()
 
 		Esfera* esfera = new Esfera(250, 500, 500);
 		esfera->setColor({ 0.0, 1.0, 1.0, 1.0 });
-		//esfera->setMaterial(laton);
+		esfera->setMaterial(laton);
 		gObjects.push_back(esfera);
 
 		Flota* naves = new Flota(n, naveFoco1, naveFoco2, naveFoco3);
 		gObjects.push_back(naves);
 	}
 
-
+	
 
 }
 //-------------------------------------------------------------------------
@@ -166,6 +173,17 @@ void Scene::changeScene(int id) {
 	init();
 }
 
+Scene::~Scene()
+{
+	free();
+	for (Light* el : gLights)
+	{
+		delete el; el = nullptr;
+	}
+	gLights.clear();
+	resetGL();
+}
+
 void Scene::setTIEsLights(bool active)
 {
 	if (active && mId == 6) {
@@ -173,7 +191,8 @@ void Scene::setTIEsLights(bool active)
 		naveFoco2->enable();
 		naveFoco3->enable();
 	}
-	else if (mId == 6) {
+	else 
+	{
 		naveFoco1->disable();
 		naveFoco2->disable();
 		naveFoco3->disable();
@@ -194,6 +213,7 @@ void Scene::free()
 		delete el;  el = nullptr;
 	}
 	gTextures.clear();
+
 }
 
 //-------------------------------------------------------------------------
@@ -205,56 +225,77 @@ void Scene::setGL()
 	glEnable(GL_LIGHTING);
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_NORMALIZE);
-	setLights();
 	initGL = true;
 }
 
 void Scene::setLights() {
 	glEnable(GL_LIGHTING);
 
-	dirLight = new DirLight();
-	dirLight->enable();
-	dirLight->setPosDir(fvec3(1, 1, 1));
-	dirLight->setAmb(fvec4(0, 0, 0, 1));
-	dirLight->setDiff(fvec4(1, 1, 1, 1));
-	dirLight->setSpec(fvec4(0.5, 0.5, 0.5, 1));
+	//Scene::dirLight = new DirLight(); 
+	Scene::dirLight->enable();
+	Scene::dirLight->setPosDir(fvec3(1, 1, 1));
+	Scene::dirLight->setAmb(fvec4(0, 0, 0, 1));
+	Scene::dirLight->setDiff(fvec4(1, 1, 1, 1));
+	Scene::dirLight->setSpec(fvec4(0.5, 0.5, 0.5, 1));
+	gLights.push_back(Scene::dirLight);
 
-	posLight = new PosLight();
+	//Scene::posLight = new PosLight();
 	posLight->disable();
 	posLight->setPosDir(fvec3(250, 250, 0));
 	posLight->setAmb(fvec4(0, 0, 0, 1));
 	posLight->setDiff(fvec4(1, 1, 0, 1));
 	posLight->setSpec(fvec4(0.5, 0.5, 0.5, 1));
+	gLights.push_back(posLight);
 
-	spotLight = new SpotLight(fvec3(0, 0, 300));
+
+	//Scene::spotLight = new SpotLight(fvec3(0, 0, 300));
 	spotLight->disable();
-	spotLight->setSpot(fvec3(0, 0, -1), 55, 0);
+	spotLight->setSpot(fvec3(0, 0.5, -1), 55, 0);
 	spotLight->setAmb(fvec4(0, 0, 0, 1));
 	spotLight->setDiff(fvec4(1, 1, 1, 1));
 	spotLight->setSpec(fvec4(0.5, 0.5, 0.5, 1));
+	gLights.push_back(spotLight);
 
-	naveFoco1 = new SpotLight(fvec3(0, 0, 0));
+	//Scene::naveFoco1 = new SpotLight(fvec3(0, 0, 0));
 	naveFoco1->disable();
 	naveFoco1->setSpot(fvec3(0, -1, 0), 20, 50);
 	naveFoco1->setAmb(fvec4(0, 0, 0, 1));
 	naveFoco1->setDiff(fvec4(1, 1, 1, 1));
 	naveFoco1->setSpec(fvec4(0.5, 0.5, 0.5, 1));
+	gLights.push_back(naveFoco1);
 
-	naveFoco2 = new SpotLight(fvec3(0, 0, 0));
+	//Scene::naveFoco2 = new SpotLight(fvec3(0, 0, 0));
 	naveFoco2->disable();
 	naveFoco2->setSpot(fvec3(0, -1, 0), 20, 50);
 	naveFoco2->setAmb(fvec4(0, 0, 0, 1));
 	naveFoco2->setDiff(fvec4(1, 1, 1, 1));
 	naveFoco2->setSpec(fvec4(0.5, 0.5, 0.5, 1));
+	gLights.push_back(naveFoco2);
 
-	naveFoco3 = new SpotLight(fvec3(0, 0, 0));
+	//Scene::naveFoco3 = new SpotLight(fvec3(0, 0, 0));
 	naveFoco3->disable();
 	naveFoco3->setSpot(fvec3(0, -1, 0), 20, 50);
 	naveFoco3->setAmb(fvec4(0, 0, 0, 1));
 	naveFoco3->setDiff(fvec4(1, 1, 1, 1));
 	naveFoco3->setSpec(fvec4(0.5, 0.5, 0.5, 1));
+	gLights.push_back(naveFoco3);
 }
 
+void Scene::orbita()
+{
+	if (mId == 6)
+	{
+		gObjects[2]->setModelMat(rotate(gObjects[2]->modelMat(), radians(1.0), dvec3(0, 0, -1)));
+	}
+}
+
+void Scene::rota()
+{
+	if (mId == 6)
+	{
+		gObjects[2]->setModelMat(rotate(gObjects[2]->modelMat(), radians(0.5), dvec3(0, 1, 0)));
+	}
+}
 //-------------------------------------------------------------------------
 void Scene::resetGL()
 {

@@ -6,18 +6,18 @@
 class Light { // Abstract class
 protected:
 	static GLuint cont; // Atributo para poder generar un nuevo id cada vez
-	GLuint id = GL_LIGHT0 + GL_MAX_LIGHTS; // Primer id no válido
-	// Atributos lumínicos y geométrico de la fuente de luz
+	GLuint id = GL_LIGHT0 + GL_MAX_LIGHTS; // Primer id no vï¿½lido
+	// Atributos lumï¿½nicos y geomï¿½trico de la fuente de luz
 	glm::fvec4 ambient = { 0.1, 0.1, 0.1, 1 };
 	glm::fvec4 diffuse = { 0.5, 0.5, 0.5, 1 };
 	glm::fvec4 specular = { 0.5, 0.5, 0.5, 1 };
 	glm::fvec4 posDir = { 0, 0, 1, 0 };
-	// Añade setter’s para cambiar el valor de los atributos lumínicos
+	// Aï¿½ade setterï¿½s para cambiar el valor de los atributos lumï¿½nicos
 public:
 	Light();
 	virtual ~Light() { disable(); }
 	void uploadL();
-	// Método abstracto
+	// Mï¿½todo abstracto
 	virtual void upload(glm::dmat4 const& modelViewMat) = 0;
 
 	void disable() { if (id < GL_LIGHT0 + GL_MAX_LIGHTS) glDisable(id); };
@@ -36,7 +36,7 @@ public:
 
 class PosLight : public Light {
 protected:
-	// Factores de atenuación
+	// Factores de atenuaciï¿½n
 	GLfloat kc = 1, kl = 0, kq = 0;
 public:
 	virtual void upload(glm::dmat4 const& modelViewMat);

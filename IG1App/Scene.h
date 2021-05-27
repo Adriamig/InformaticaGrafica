@@ -18,12 +18,12 @@
 class Scene
 {
 public:
-	DirLight* dirLight;
-	PosLight* posLight;
-	SpotLight* spotLight;
+	static DirLight* dirLight;
+	static PosLight* posLight;
+	static SpotLight* spotLight;
 
-	Scene(): dirLight(nullptr), posLight(nullptr), spotLight(nullptr) {};
-	~Scene() { free(); resetGL(); };
+	Scene() {};
+	~Scene();
 
 	Scene(const Scene& s) = delete;  // no copy constructor
 	Scene& operator=(const Scene& s) = delete;  // no copy assignment
@@ -38,24 +38,28 @@ public:
 	void changeScene(int id);
 
 	void setTIEsLights(bool active);
+	void setLights();
+
+	void orbita();
+	void rota();
 
 	//void sceneDirLight(Camera const& cam) const;
 
 protected:
 	void free();
 	void setGL();
-	void setLights();
 	void resetGL();
 
 	int mId = 0;
 	static bool initGL;
 
-	SpotLight* naveFoco1 = nullptr;
-	SpotLight* naveFoco2 = nullptr;
-	SpotLight* naveFoco3 = nullptr;
+	static SpotLight* naveFoco1;
+	static SpotLight* naveFoco2;
+	static SpotLight* naveFoco3;
 
 	std::vector<Abs_Entity*> gObjects;  // Entities (graphic objects) of the scene
 	std::vector<Texture*> gTextures;
+	std::vector<Light*> gLights;
 };
 //-------------------------------------------------------------------------
 

@@ -458,6 +458,7 @@ void Esfera::render(dmat4 const& modelViewMat) const
 	{
 		dmat4 aMat = modelViewMat * mModelMat;
 		upload(aMat);
+		glDisable(GL_COLOR_MATERIAL);
 		if (material != nullptr)
 			material->upload();
 		else {
@@ -626,4 +627,19 @@ Flota::Flota(Texture* noche, SpotLight* f1, SpotLight* f2, SpotLight* f3) {
 	nave3->setModelMat(translate(nave3->modelMat(), dvec3(0, 300, 0)));
 	nave3->setModelMat(scale(nave3->modelMat(), dvec3(0.1, 0.1, 0.1)));
 	addEntity(nave3);
+}
+
+void Flota::update()
+{
+	mModelMat = rotate(mModelMat, radians(ang2), dvec3(0, 1, 0));
+	mModelMat = rotate(mModelMat, radians(ang), dvec3(0, 0, 1));
+}
+void Flota::rota()
+{
+	mModelMat = rotate(mModelMat, radians(ang2), dvec3(0, 1, 0));
+}
+
+void Flota::orbita()
+{
+	mModelMat = rotate(mModelMat, radians(ang), dvec3(0, 0, 1));
 }

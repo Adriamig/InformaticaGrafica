@@ -47,9 +47,10 @@ void IG1App::init()
 
 	mCamera->set2D();
 	mCamera2->set2D();
+	mScene->setLights();
 	mScene->init();
-	//mScene2->changeScene(1);
-	//mScene2->init();
+	mScene2->changeScene(6);
+	mScene2->init();
 
 }
 //-------------------------------------------------------------------------
@@ -105,7 +106,8 @@ void IG1App::display()
 
 	if (m2Vistas) display2Vistas();
 	else if (m2Scenes) display2Scenes();
-	mScene->render(*mCamera);  // uploads the viewport and camera to the GPU
+	else
+		mScene->render(*mCamera);  // uploads the viewport and camera to the GPU
 
 	glutSwapBuffers();	// swaps the front and back buffer
 }
@@ -170,27 +172,27 @@ void IG1App::key(unsigned char key, int x, int y)
 		mScene->changeScene(0);
 		break;
 	case '1':
-		if (!m2Scenes)
+		//if (!m2Scenes)
 			mScene->changeScene(1);
 		break;
 	case '2':
-		if (!m2Scenes)
+		//if (!m2Scenes)
 			mScene->changeScene(2);
 		break;
 	case '3':
-		if (!m2Scenes)
+		//if (!m2Scenes)
 			mScene->changeScene(3);
 		break;
 	case '4':
-		if (!m2Scenes)
+		//if (!m2Scenes)
 			mScene->changeScene(4);
 		break;
 	case '5':
-		if (!m2Scenes)
+		//if (!m2Scenes)
 			mScene->changeScene(5);
 		break;
 	case '6':
-		if (!m2Scenes)
+		//if (!m2Scenes)
 			mScene->changeScene(6);
 		break;
 	case 'm':
@@ -210,9 +212,16 @@ void IG1App::key(unsigned char key, int x, int y)
 		m2Vistas = !m2Vistas;
 		break;
 	case 'y':
-		if (m2Vistas) m2Vistas = false;
-		m2Scenes = !m2Scenes;
-		mScene->changeScene(0);
+		if (m2Scenes && x < mWinW / 2)
+			mScene2->orbita();
+		else
+			mScene->orbita();
+		break;
+	case 'b':
+		if (m2Scenes && x < mWinW / 2)
+			mScene2->rota();
+		else
+			mScene->rota();
 		break;
 	case 'q':
 		if (m2Scenes && x < mWinW / 2)
@@ -285,6 +294,11 @@ void IG1App::key(unsigned char key, int x, int y)
 		else {
 			mScene->setTIEsLights(false);
 		}
+		break;
+	case 'j':
+		if (m2Vistas) m2Vistas = false;
+		m2Scenes = !m2Scenes;
+		mScene->changeScene(0);
 		break;
 	default:
 		need_redisplay = false;

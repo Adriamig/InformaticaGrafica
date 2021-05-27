@@ -13,7 +13,7 @@ Light::Light() {
 };
 
 void Light::uploadL() {
-	// Transfiere las características de la luz a la GPU
+	// Transfiere las caracterï¿½sticas de la luz a la GPU
 	glLightfv(id, GL_AMBIENT, value_ptr(ambient));
 	glLightfv(id, GL_DIFFUSE, value_ptr(diffuse));
 	glLightfv(id, GL_SPECULAR, value_ptr(specular));
@@ -54,7 +54,7 @@ void SpotLight::upload(glm::dmat4 const& modelViewMat) {
 	glLightf(id, GL_SPOT_EXPONENT, exp);
 }
 
-// Ojo al 0.0: la dirección de emisión del foco es vector
+// Ojo al 0.0: la direcciï¿½n de emisiï¿½n del foco es vector
 void SpotLight::setSpot(glm::fvec3 dir, GLfloat cf, GLfloat e) {
 	direction = glm::fvec4(dir, 0.0);
 	cutoff = cf;

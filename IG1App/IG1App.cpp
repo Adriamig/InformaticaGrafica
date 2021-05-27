@@ -48,8 +48,8 @@ void IG1App::init()
 	mCamera->set2D();
 	mCamera2->set2D();
 	mScene->init();
-	mScene2->changeScene(1);
-	mScene2->init();
+	//mScene2->changeScene(1);
+	//mScene2->init();
 
 }
 //-------------------------------------------------------------------------
@@ -189,6 +189,10 @@ void IG1App::key(unsigned char key, int x, int y)
 		if (!m2Scenes)
 			mScene->changeScene(5);
 		break;
+	case '6':
+		if (!m2Scenes)
+			mScene->changeScene(6);
+		break;
 	case 'm':
 		if (m2Scenes && x < mWinW / 2)
 			mCamera2->orbit(1, 1);
@@ -210,6 +214,62 @@ void IG1App::key(unsigned char key, int x, int y)
 		m2Scenes = !m2Scenes;
 		mScene->changeScene(0);
 		break;
+	case 'q':
+		if (m2Scenes && x < mWinW / 2)
+			mScene2->dirLight->enable();
+		else
+			mScene->dirLight->enable();
+		break;
+	case 'w':
+		if (m2Scenes && x < mWinW / 2)
+			mScene2->dirLight->disable();
+		else
+			mScene->dirLight->disable();
+		break;
+	case 'a':
+		if (m2Scenes && x < mWinW / 2)
+			mScene2->posLight->enable();
+		else
+			mScene->posLight->enable();
+		break;
+	case 's':
+		if (m2Scenes && x < mWinW / 2)
+			mScene2->posLight->disable();
+		else
+			mScene->posLight->disable();
+		break;
+	case 'z':
+		if (m2Scenes && x < mWinW / 2)
+			mScene2->spotLight->enable();
+		else
+			mScene->spotLight->enable();
+		break;
+	case 'x':
+		if (m2Scenes && x < mWinW / 2)
+			mScene2->spotLight->disable();
+		else
+			mScene->spotLight->disable();
+		break;
+	case 'e':
+		if (m2Scenes && x < mWinW / 2) {
+			GLfloat amb[] = { 0.0, 0.0, 0.0, 1.0 };
+			mScene2->setLightModel(amb);
+		}
+		else {
+			GLfloat amb[] = { 0.0, 0.0, 0.0, 1.0 };
+			mScene->setLightModel(amb);
+		}
+		break;
+	case 'r':
+		if (m2Scenes && x < mWinW / 2) {
+			GLfloat amb[] = { 0.2, 0.2, 0.2, 1.0 };
+			mScene2->setLightModel(amb);
+		}
+		else {
+			GLfloat amb[] = { 0.2, 0.2, 0.2, 1.0 };
+			mScene->setLightModel(amb);
+		}
+		break;
 	default:
 		need_redisplay = false;
 		break;
@@ -229,43 +289,43 @@ void IG1App::specialKey(int key, int x, int y)
 	case GLUT_KEY_RIGHT:
 		if (mdf == GLUT_ACTIVE_CTRL)
 			if (m2Scenes && x < mWinW / 2)
-				mCamera2->moveLR(1);
+				mCamera2->moveLR(5);
 			else
-				mCamera->moveLR(1);
+				mCamera->moveLR(5);
 		//mCamera->pitch(-1);   // rotates -1 on the X axis
 		else
 			if (m2Scenes && x < mWinW / 2)
-				mCamera2->moveLR(-1);
+				mCamera2->moveLR(-5);
 			else
-				mCamera->moveLR(-1);
+				mCamera->moveLR(-5);
 		//mCamera->pitch(1);    // rotates 1 on the X axis
 		break;
 	case GLUT_KEY_LEFT:
 		if (mdf == GLUT_ACTIVE_CTRL)
 			if (m2Scenes && x < mWinW / 2)
-				mCamera2->moveLR(-1);
+				mCamera2->moveLR(-5);
 			else
-				mCamera->moveLR(-1);
+				mCamera->moveLR(-5);
 		//mCamera->yaw(1);      // rotates 1 on the Y axis 
 		else
 			if (m2Scenes && x < mWinW / 2)
-				mCamera2->moveLR(1);
+				mCamera2->moveLR(5);
 			else
-				mCamera->moveLR(1);
+				mCamera->moveLR(5);
 		//mCamera->yaw(-1);     // rotate -1 on the Y axis 
 		break;
 	case GLUT_KEY_UP:
 		if (m2Scenes && x < mWinW / 2)
-			mCamera2->moveUD(-1);
+			mCamera2->moveUD(-5);
 		else
-			mCamera->moveUD(-1);
+			mCamera->moveUD(-5);
 		//mCamera->roll(1);    // rotates 1 on the Z axis
 		break;
 	case GLUT_KEY_DOWN:
 		if (m2Scenes && x < mWinW / 2)
-			mCamera2->moveUD(1);
+			mCamera2->moveUD(5);
 		else
-			mCamera->moveUD(1);
+			mCamera->moveUD(5);
 		//mCamera->roll(-1);   // rotates -1 on the Z axis
 		break;
 	default:

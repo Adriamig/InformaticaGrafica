@@ -153,7 +153,9 @@ IndexMesh* IndexMesh::generateGrid(GLdouble lado, GLuint nDiv)
 			k++;
 		}
 	}
+
 	m->buildNormalVectors();
+
 	return m;
 }
 

@@ -8,6 +8,7 @@
 #include "Mesh.h"
 #include "Texture.h"
 #include "IndexMesh.h"
+#include "Material.h"
 
 //-------------------------------------------------------------------------
 
@@ -178,6 +179,21 @@ public:
 	virtual void render(glm::dmat4 const& modelViewMat) const;
 };
 
+class Cone : public Abs_Entity
+{
+public:
+	Cone(GLdouble h, GLdouble r, GLuint n);
+	virtual void render(glm::dmat4 const& modelViewMat) const;
+};
+
+class Grid : public Abs_Entity
+{
+public:
+	Grid(GLdouble lado, GLuint nDiv);
+	~Grid();
+	virtual void render(glm::dmat4 const& modelViewMat) const;
+};
+
 
 class CompoundEntity : public Abs_Entity
 {
@@ -196,14 +212,26 @@ public:
 	TIE(Texture* noche);
 };
 
-class Cone : public Abs_Entity
-{
+class GridCube : public CompoundEntity {
 public:
-	Cone(GLdouble h, GLdouble r, GLuint n);
-	virtual void render(glm::dmat4 const& modelViewMat) const;
+	GridCube(Texture* stones, Texture* checker);
 };
 
-class Esfera : public Abs_Entity
+class Flota : public CompoundEntity {
+public:
+	Flota(Texture* noche);
+};
+
+class EntityWithMaterial : public Abs_Entity {
+public:
+	EntityWithMaterial() : Abs_Entity() { };
+	virtual ~EntityWithMaterial() { };
+	void setMaterial(Material* matl) { material = matl; };
+protected:
+	Material* material = nullptr;
+};
+
+class Esfera : public EntityWithMaterial
 {
 public:
 	Esfera(GLdouble r, GLdouble p, GLuint m);
@@ -211,16 +239,4 @@ public:
 	virtual void render(glm::dmat4 const& modelViewMat) const;
 };
 
-class Grid : public Abs_Entity
-{
-public:
-	Grid(GLdouble lado, GLuint nDiv);
-	~Grid();
-	virtual void render(glm::dmat4 const& modelViewMat) const;
-};
-
-class GridCube : public CompoundEntity {
-public:
-	GridCube(Texture* stones, Texture* checker);
-};
 #endif //_H_Entities_H_

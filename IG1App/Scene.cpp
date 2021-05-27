@@ -6,6 +6,8 @@
 using namespace glm;
 //-------------------------------------------------------------------------
 
+bool Scene::initGL = false;
+
 void Scene::init()
 {
 	//Práctica 1
@@ -75,9 +77,9 @@ void Scene::init()
 	//  }
 
 	//Práctica 2
-	setGL();  // OpenGL settings
-	glEnable(GL_DEPTH_TEST);
-    // Textures
+	if (!initGL) setGL();  // OpenGL settings
+
+	// Textures
 	Texture* n = new Texture();
 	n->load("..\\Bmps\\noche.bmp", 100);
 	gTextures.push_back(n);
@@ -95,25 +97,27 @@ void Scene::init()
 
 		TIE* nave = new TIE(n);
 		gObjects.push_back(nave);
-		
+
 	}
 	else if (mId == 1)
 	{
 		gObjects.push_back(new EjesRGB(400));
 		auto* anillo = new AnilloCuadrado();
 		gObjects.push_back(anillo);
-		
+
 	}
 	else if (mId == 2)
 	{
 		gObjects.push_back(new EjesRGB(400));
 		auto* cubo = new Cubo(50);
+		cubo->setColor(dvec4(0.0, 1.0, 0.0, 1.0));
 		gObjects.push_back(cubo);
 	}
 	else if (mId == 3)
 	{
 		gObjects.push_back(new EjesRGB(400));
 		auto* cone = new Cone(100, 50, 50);
+		cone->setColor(dvec4(0.0, 0.0, 1.0, 1.0));
 		gObjects.push_back(cone);
 	}
 	else if (mId == 4)
@@ -121,6 +125,7 @@ void Scene::init()
 		gObjects.push_back(new EjesRGB(400));
 		Esfera* sphere1 = new Esfera(100, 50, 50);
 		sphere1->setModelMat(translate(sphere1->modelMat(), dvec3(0, 0, 250)));
+		sphere1->setColor({ 0.0, 0.25, 0.41, 1.0 });
 		//sphere1->setModelMat(rotate(sphere1->modelMat(), radians(180.0), dvec3(0, 0, 1)));
 		gObjects.push_back(sphere1);
 		Sphere* sphere2 = new Sphere(100);
@@ -133,7 +138,37 @@ void Scene::init()
 		gObjects.push_back(new EjesRGB(400));
 		gObjects.push_back(new GridCube(stones, checker));
 	}
-	
+	else if (mId == 6) {
+		gObjects.push_back(new EjesRGB(400));
+
+		Esfera* esfera = new Esfera(250, 150, 150);
+		esfera->setColor({ 0.0, 1.0, 1.0, 1.0 });
+		gObjects.push_back(esfera);
+
+		Flota* naves = new Flota(n);
+		gObjects.push_back(naves);
+
+		// Tiene que ser compund entity los 3
+		//TIE* nave = new TIE(n);
+		//nave->setModelMat(translate(nave->modelMat(), dvec3(0, 300, 0)));
+		//nave->setModelMat(scale(nave->modelMat(), dvec3(0.5, 0.5, 0.5)));
+		//gObjects.push_back(nave);
+
+		//TIE* nave2 = new TIE(n);
+		//nave2->setModelMat(rotate(nave2->modelMat(), radians(10.0), dvec3(1, 0, 0)));
+		//nave2->setModelMat(rotate(nave2->modelMat(), radians(5.0), dvec3(0, 0, 1)));
+		//nave2->setModelMat(translate(nave2->modelMat(), dvec3(0, 300, 0)));
+		//nave2->setModelMat(scale(nave2->modelMat(), dvec3(0.5, 0.5, 0.5)));
+		//gObjects.push_back(nave2);
+
+		//TIE* nave3 = new TIE(n);
+		//nave3->setModelMat(rotate(nave3->modelMat(), radians(-10.0), dvec3(1, 0, 0)));
+		//nave3->setModelMat(rotate(nave3->modelMat(), radians(5.0), dvec3(0, 0, 1)));
+		//nave3->setModelMat(translate(nave3->modelMat(), dvec3(0, 300, 0)));
+		//nave3->setModelMat(scale(nave3->modelMat(), dvec3(0.5, 0.5, 0.5)));
+		//gObjects.push_back(nave3);
+	}
+
 
 
 }
@@ -159,28 +194,62 @@ void Scene::free()
 	}
 	gTextures.clear();
 }
+
 //-------------------------------------------------------------------------
 void Scene::setGL()
 {
 	// OpenGL basic setting
 	glClearColor(0.0, 0.0, 0.0, 1.0);  // background color (alpha=1 -> opaque)
 	glEnable(GL_DEPTH_TEST);  // enable Depth test 
+	glEnable(GL_LIGHTING);
 	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_NORMALIZE);
+	setLights();
+	initGL = true;
+}
+
+void Scene::setLights() {
+	glEnable(GL_LIGHTING);
+
+	dirLight = new DirLight();
+	dirLight->enable();
+	dirLight->setPosDir(fvec3(1, 1, 1));
+	dirLight->setAmb(fvec4(0, 0, 0, 1));
+	dirLight->setDiff(fvec4(1, 1, 1, 1));
+	dirLight->setSpec(fvec4(0.5, 0.5, 0.5, 1));
+
+	posLight = new PosLight();
+	posLight->disable();
+	posLight->setPosDir(fvec3(250, 250, 0));
+	posLight->setAmb(fvec4(0, 0, 0, 1));
+	posLight->setDiff(fvec4(1, 1, 0, 1));
+	posLight->setSpec(fvec4(0.5, 0.5, 0.5, 1));
+
+	spotLight = new SpotLight(fvec3(0, 0, 300));
+	spotLight->disable();
+	spotLight->setSpot(fvec3(0, 0, -1), 55, 0);
+	spotLight->setAmb(fvec4(0, 0, 0, 1));
+	spotLight->setDiff(fvec4(1, 1, 1, 1));
+	spotLight->setSpec(fvec4(0.5, 0.5, 0.5, 1));
 
 }
+
 //-------------------------------------------------------------------------
 void Scene::resetGL()
 {
 	glClearColor(.0, .0, .0, .0);  // background color (alpha=1 -> opaque)
 	glDisable(GL_DEPTH_TEST);  // disable Depth test 
+	glDisable(GL_LIGHTING);
 	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_NORMALIZE);
 }
 //-------------------------------------------------------------------------
 
 void Scene::render(Camera const& cam) const
 {
-	if(mId != 1)
-		sceneDirLight(cam);
+	dirLight->upload(cam.viewMat());
+	posLight->upload(cam.viewMat());
+	spotLight->upload(cam.viewMat());
 	cam.upload();
 
 	for (Abs_Entity* el : gObjects)
@@ -197,18 +266,18 @@ void Scene::update() {
 	}
 }
 
-void Scene::sceneDirLight(Camera const& cam) const
-{
-	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
-	glm::fvec4 posDir = { 1, 1, 1, 0 };
-	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixd(value_ptr(cam.viewMat()));
-	glLightfv(GL_LIGHT0, GL_POSITION, value_ptr(posDir));
-	glm::fvec4 ambient = { 0, 0, 0, 1 };
-	glm::fvec4 diffuse = { 1, 1, 1, 1 };
-	glm::fvec4 specular = { 0.5, 0.5, 0.5, 1 };
-	glLightfv(GL_LIGHT0, GL_AMBIENT, value_ptr(ambient));
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, value_ptr(diffuse));
-	glLightfv(GL_LIGHT0, GL_SPECULAR, value_ptr(specular));
-}
+//void Scene::sceneDirLight(Camera const& cam) const
+//{
+//	glEnable(GL_LIGHTING);
+//	glEnable(GL_LIGHT0);
+//	glm::fvec4 posDir = { 1, 1, 1, 0 };
+//	glMatrixMode(GL_MODELVIEW);
+//	glLoadMatrixd(value_ptr(cam.viewMat()));
+//	glLightfv(GL_LIGHT0, GL_POSITION, value_ptr(posDir));
+//	glm::fvec4 ambient = { 0, 0, 0, 1 };
+//	glm::fvec4 diffuse = { 1, 1, 1, 1 };
+//	glm::fvec4 specular = { 0.5, 0.5, 0.5, 1 };
+//	glLightfv(GL_LIGHT0, GL_AMBIENT, value_ptr(ambient));
+//	glLightfv(GL_LIGHT0, GL_DIFFUSE, value_ptr(diffuse));
+//	glLightfv(GL_LIGHT0, GL_SPECULAR, value_ptr(specular));
+//}

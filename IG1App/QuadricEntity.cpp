@@ -85,7 +85,7 @@ void PartialDisk::render(glm::dmat4 const& modelViewMat) const
 	glDepthMask(GL_FALSE);
 	glEnable(GL_BLEND);
 	glBlendFunc(1, GL_ONE_MINUS_SRC_ALPHA);
-	mTexture->bindLight(GL_MODULATE);
+	mTexture->bind(GL_MODULATE);
 	//glColor3f(0.0, 0.25, 0.41);
 
 	gluQuadricTexture(q, GL_TRUE);

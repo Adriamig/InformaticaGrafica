@@ -30,13 +30,6 @@ void Texture::bind(GLuint mixMode) // GL_REPLACE, GL_MODULATE, GL_ADD
 }
 //-------------------------------------------------------------------------
 
-void Texture::bindLight(GLuint mixMode) // GL_REPLACE, GL_MODULATE, GL_ADD
-{
-	glBindTexture(GL_TEXTURE_2D, mId);
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, mixMode);
-}
-//-------------------------------------------------------------------------
-
 void Texture::load(const std::string & BMP_Name, GLubyte alpha)
 {
 	if (mId == 0) init();

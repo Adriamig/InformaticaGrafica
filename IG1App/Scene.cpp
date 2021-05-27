@@ -85,8 +85,8 @@ void Scene::init()
 
 	//Práctica 2
 	if (!initGL) setGL();  // OpenGL settings
-	else
-		setTIEsLights(false);
+	else setTIEsLights(false);
+
 	// Textures
 	Texture* n = new Texture();
 	n->load("..\\Bmps\\noche.bmp", 100);
@@ -250,7 +250,7 @@ void Scene::setLights() {
 
 	//Scene::spotLight = new SpotLight(fvec3(0, 0, 300));
 	spotLight->disable();
-	spotLight->setSpot(fvec3(0, 0.5, -1), 55, 0);
+	spotLight->setSpot(fvec3(0, 0, -1), 55, 0);
 	spotLight->setAmb(fvec4(0, 0, 0, 1));
 	spotLight->setDiff(fvec4(1, 1, 1, 1));
 	spotLight->setSpec(fvec4(0.5, 0.5, 0.5, 1));

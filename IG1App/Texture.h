@@ -23,7 +23,6 @@ public:
   void loadColorBuffer(GLsizei width, GLsizei height, GLuint buffer);
   
   void bind(GLuint mixMode);   // GL_REPLACE, GL_MODULATE, GL_ADD, ...
-  void bindLight(GLuint mixMode);   // GL_REPLACE, GL_MODULATE, GL_ADD, ...
   void unbind() const { glBindTexture(GL_TEXTURE_2D, 0); };
 
   GLuint width() const { return mWidth; };

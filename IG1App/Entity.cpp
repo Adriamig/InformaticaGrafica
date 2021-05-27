@@ -491,7 +491,7 @@ void Grid::render(dmat4 const& modelViewMat) const
 	{
 		dmat4 aMat = modelViewMat * mModelMat;
 		glPolygonMode(GL_BACK, GL_LINE);
-		mTexture->bindLight(GL_MODULATE);
+		mTexture->bind(GL_MODULATE);
 		upload(aMat);
 		mMesh->render();
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
